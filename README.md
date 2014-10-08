@@ -1,6 +1,6 @@
 # libFBC
 A library for applying flux balance constraint methods on SBML models. This
-code was developed as part of the
+code was developed within the scope of the
 [BioPreDyn project](http://www.biopredyn.eu/).
 
 ## Dependencies
