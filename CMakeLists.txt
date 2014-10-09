@@ -3,4 +3,16 @@ project(libfbc)
 enable_testing()
 include(CTest)
 
+set(LIBFBC_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
+if(NOT WIN32)
+  option(FBC_GENERATE_DOXYGEN "Build the Doxygen documentation" ON)
+else()
+  option(FBC_GENERATE_DOXYGEN "Build the Doxygen documentation" OFF)
+endif()
+
 add_subdirectory(src)
+
+if (FBC_GENERATE_DOXYGEN)
+  add_subdirectory(doxygen)
+endif()
