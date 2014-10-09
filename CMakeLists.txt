@@ -12,6 +12,7 @@ else()
 endif()
 
 add_subdirectory(src)
+add_subdirectory(testing)
 
 if (FBC_GENERATE_DOXYGEN)
   add_subdirectory(doxygen)

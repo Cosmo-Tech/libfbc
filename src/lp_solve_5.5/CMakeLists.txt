@@ -1,4 +1,7 @@
-set(LPSOLVE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(
+  LPSOLVE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
+  CACHE PATH "lp_solve source directory" FORCE
+  )
 
 set(SOURCES
   ${LPSOLVE_SOURCE_DIR}/lp_MDO.c
@@ -56,12 +59,12 @@ set(SOURCES
   ${LPSOLVE_SOURCE_DIR}/colamd/colamd.h
   )
 
-include_directories("${LPSOLVE_SOURCE_DIR}"
-  "${LPSOLVE_SOURCE_DIR}/shared"
-  "${LPSOLVE_SOURCE_DIR}/bfp"
-  "${LPSOLVE_SOURCE_DIR}/bfp/bfp_LUSOL"
-  "${LPSOLVE_SOURCE_DIR}/bfp/bfp_LUSOL/LUSOL"
-  "${LPSOLVE_SOURCE_DIR}/colamd")
+include_directories(${LPSOLVE_SOURCE_DIR})
+include_directories(${LPSOLVE_SOURCE_DIR}/shared)
+include_directories(${LPSOLVE_SOURCE_DIR}/bfp)
+include_directories(${LPSOLVE_SOURCE_DIR}/bfp/bfp_LUSOL)
+include_directories(${LPSOLVE_SOURCE_DIR}/bfp/bfp_LUSOL/LUSOL)
+include_directories(${LPSOLVE_SOURCE_DIR}/colamd)
 
 add_definitions(-DINVERSE_ACTIVE=INVERSE_LUSOL)
 add_definitions(-DYY_NEVER_INTERACTIVE)
@@ -69,4 +72,6 @@ add_definitions(-DPARSER_LP)
 add_definitions(-DRoleIsExternalInvEngine)
 
 add_library(lpsolve55-static STATIC ${SOURCES})
+target_link_libraries(lpsolve55-static ${CMAKE_DL_LIBS} m)
 add_library(lpsolve55 SHARED ${SOURCES})
+target_link_libraries(lpsolve55 ${CMAKE_DL_LIBS} m)
