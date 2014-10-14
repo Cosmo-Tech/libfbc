@@ -3,6 +3,8 @@ set(
   CACHE PATH "libFBC source directory" FORCE
   )
 
+find_package(LIBSBML REQUIRED)
+
 set(SOURCES
   ${FBC_SOURCE_DIR}/fbcConstraint.cxx
   ${FBC_SOURCE_DIR}/fbcConstraint.hxx
@@ -17,4 +19,6 @@ set(SOURCES
 include_directories(${FBC_SOURCE_DIR})
 
 add_library(fbc-static STATIC ${SOURCES})
+target_link_libraries(fbc-static ${LIBSBML_LIBRARY})
 add_library(fbc SHARED ${SOURCES})
+target_link_libraries(fbc ${LIBSBML_LIBRARY})

@@ -4,6 +4,7 @@ enable_testing()
 include(CTest)
 
 set(LIBFBC_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
 if(NOT WIN32)
   option(FBC_GENERATE_DOXYGEN "Build the Doxygen documentation" ON)

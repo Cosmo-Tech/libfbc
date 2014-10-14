@@ -2,9 +2,12 @@
 #define __fbcProblem_hxx
 
 #include <list>
+#include <iostream>
 #include "fbcSolution.hxx"
 #include "fbcConstraint.hxx"
 #include "fbcStoichiometryMatrix.hxx"
+#include "sbml/SBMLReader.h"
+#include "sbml/SBMLDocument.h"
 
 namespace fbc
 {
@@ -21,9 +24,9 @@ class Problem
     std::list<fbc::Constraint> getListOfConstraints();
     fbc::Solution getSolution();
     fbc::StoichiometryMatrix getStoichiometryMatrix();
-    void initFromLPFile();
-    void initFromSBMLFile();
-    void initFromSBMLString();
+    void initFromLPFile(const char* file);
+    void initFromSBMLFile(const char* file);
+    void initFromSBMLString(const char* string);
     void solve();
 };
 
