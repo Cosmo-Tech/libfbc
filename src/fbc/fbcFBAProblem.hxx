@@ -1,33 +1,40 @@
-#ifndef __fbcProblem_hxx
-#define __fbcProblem_hxx
+#ifndef __fbcFBAProblem_hxx
+#define __fbcFBAProblem_hxx
 
-#include <list>
+#include <vector>
 #include <iostream>
+#include <string>
+#include <algorithm>
 #include "fbcSolution.hxx"
-#include "fbcConstraint.hxx"
-#include "fbcStoichiometryMatrix.hxx"
 #include "sbml/SBMLReader.h"
 #include "sbml/SBMLDocument.h"
+#include "sbml/Model.h"
+#include "sbml/Reaction.h"
+#include "sbml/Model.h"
+#include "sbml/packages/fbc/extension/FbcModelPlugin.h"
+#include "sbml/packages/fbc/sbml/Objective.h"
+#include "sbml/packages/fbc/sbml/FluxObjective.h"
+#include "lp_lib.h"
 
 namespace fbc
 {
 
-class Problem
+class FBAProblem
 {
   private:
-    std::list<fbc::Constraint> listOfConstraints;
-    fbc::StoichiometryMatrix stoichiometryMatrix;
     fbc::Solution solution;
+    lprec* lpModel;
+    void populateMatrix(Model* sb_model, FbcModelPlugin* pl);
   public:
-    Problem();
-    ~Problem();
-    std::list<fbc::Constraint> getListOfConstraints();
+    FBAProblem();
+    ~FBAProblem();
+    lprec* getLpModel();
     fbc::Solution getSolution();
-    fbc::StoichiometryMatrix getStoichiometryMatrix();
     void initFromLPFile(const char* file);
     void initFromSBMLFile(const char* file);
     void initFromSBMLString(const char* string);
-    void solve();
+    void print();
+    void solveProblem();
 };
 
 }

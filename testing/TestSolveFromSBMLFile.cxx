@@ -9,8 +9,7 @@
 int main (int argc, char *argv[])
 {
   fbc::FBAProblem pbm;
-  pbm.initFromLPFile(argv[1]);
+  pbm.initFromSBMLFile(argv[1]);
   pbm.solveProblem();
-  assert(floor(pbm.getSolution().getObjectiveValue()) == 6315.0);
   return 0;
 }

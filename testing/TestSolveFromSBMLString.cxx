@@ -2,15 +2,18 @@
 #include <assert.h>
 #include <math.h>
 #include "fbcFBAProblem.hxx"
+#include "sbml/SBMLReader.h"
+#include "sbml/SBMLDocument.h"
 
 /** \brief Test for solving LP formatted models.
  * Loads a simple LP model and solves it using lp_solve library.
  */
 int main (int argc, char *argv[])
 {
+  SBMLReader reader = SBMLReader();
+  SBMLDocument* doc = reader.readSBMLFromFile(argv[1]);
   fbc::FBAProblem pbm;
-  pbm.initFromLPFile(argv[1]);
+  pbm.initFromSBMLString(doc->toSBML());
   pbm.solveProblem();
-  assert(floor(pbm.getSolution().getObjectiveValue()) == 6315.0);
   return 0;
 }
