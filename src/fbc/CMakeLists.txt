@@ -6,14 +6,10 @@ set(
 find_package(LIBSBML REQUIRED)
 
 set(SOURCES
-  ${FBC_SOURCE_DIR}/fbcConstraint.cxx
-  ${FBC_SOURCE_DIR}/fbcConstraint.hxx
   ${FBC_SOURCE_DIR}/fbcFBAProblem.cxx
   ${FBC_SOURCE_DIR}/fbcFBAProblem.hxx
   ${FBC_SOURCE_DIR}/fbcSolution.cxx
   ${FBC_SOURCE_DIR}/fbcSolution.hxx
-  ${FBC_SOURCE_DIR}/fbcStoichiometryMatrix.cxx
-  ${FBC_SOURCE_DIR}/fbcStoichiometryMatrix.hxx
 )
 
 include_directories(${FBC_SOURCE_DIR})
