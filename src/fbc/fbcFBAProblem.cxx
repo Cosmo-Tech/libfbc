@@ -188,6 +188,7 @@ void FBAProblem::print()
 void FBAProblem::solveProblem()
 {
   solve(lpModel);
+  solution = fbc::Solution(lpModel);
 }
 
 }
