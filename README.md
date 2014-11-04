@@ -4,10 +4,26 @@ code was developed within the scope of the
 [BioPreDyn project](http://www.biopredyn.eu/).
 
 ## Dependencies
-This project uses [LPsolve](http://sourceforge.net/projects/lpsolve/), a mixed
-integer linear programming solver published under the LGPL 2.0 license.
+This project uses (and distributes)
+[LPsolve](http://sourceforge.net/projects/lpsolve/), a mixed integer linear
+programming solver published under the LGPL 2.0 license.
+
+It requires [libSBML](http://sbml.org/Software/libSBML) to be installed with
+the FBC package.
+
+## Installation
+The library is built using [CMake](http://www.cmake.org/); open a command prompt
+in the project checkout folder then type:
+
+  mkdir build
+  cd build
+  cmake ..
+  make
 
 ## License
+This project is distributed under the terms of the
+[BSD-3 clause license](http://opensource.org/licenses/BSD-3-Clause):
+
 Copyright (c) 2014, The CoSMo Company
 All rights reserved.
 
