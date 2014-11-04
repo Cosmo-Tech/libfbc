@@ -14,11 +14,12 @@ the FBC package.
 ## Installation
 The library is built using [CMake](http://www.cmake.org/); open a command prompt
 in the project checkout folder then type:
-
-  mkdir build
-  cd build
-  cmake ..
-  make
+```
+mkdir build
+cd build
+cmake ..
+make
+```
 
 ## License
 This project is distributed under the terms of the
