@@ -177,7 +177,7 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
 
 /** \brief Displays the problem encoded in lpModel.
  */
-void FBAProblem::print()
+void FBAProblem::printProblem()
 {
   print_lp(lpModel);
 }

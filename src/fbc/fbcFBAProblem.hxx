@@ -33,7 +33,7 @@ class FBAProblem
     void initFromLPFile(const char* file);
     void initFromSBMLFile(const char* file);
     void initFromSBMLString(const char* string);
-    void print();
+    void printProblem();
     void solveProblem();
 };
 
