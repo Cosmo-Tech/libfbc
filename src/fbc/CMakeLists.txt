@@ -5,17 +5,18 @@ set(
 
 find_package(LIBSBML REQUIRED)
 
-set(SOURCES
+set(LIBFBC_SOURCES
   ${FBC_SOURCE_DIR}/fbcFBAProblem.cxx
   ${FBC_SOURCE_DIR}/fbcFBAProblem.hxx
   ${FBC_SOURCE_DIR}/fbcSolution.cxx
   ${FBC_SOURCE_DIR}/fbcSolution.hxx
+  CACHE PATH "libFBC source files" FORCE
 )
 
 include_directories(${FBC_SOURCE_DIR})
 include_directories(${LPSOLVE_SOURCE_DIR})
 
-add_library(fbc-static STATIC ${SOURCES})
+add_library(fbc-static STATIC ${LIBFBC_SOURCES})
 target_link_libraries(fbc-static ${LIBSBML_LIBRARY} lpsolve55-static)
-add_library(fbc SHARED ${SOURCES})
+add_library(fbc SHARED ${LIBFBC_SOURCES})
 target_link_libraries(fbc ${LIBSBML_LIBRARY} lpsolve55)
