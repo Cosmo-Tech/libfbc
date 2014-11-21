@@ -34,7 +34,7 @@ INSTALL(TARGETS fbc-static fbc
 
 # Install include files  
 FILE(GLOB include_files "${FBC_SOURCE_DIR}/*.hxx")
-INSTALL(FILES ${include_files} DESTINATION include/libfbc)
+INSTALL(FILES ${include_files} DESTINATION include/fbc)
 # Install documents
 set (INSTALL_DOCS)
 set (INSTALL_DOCS ${INSTALL_DOCS} ${CMAKE_SOURCE_DIR}/README.md)
