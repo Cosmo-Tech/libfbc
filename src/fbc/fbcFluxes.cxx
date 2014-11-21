@@ -35,7 +35,7 @@ Fluxes::~Fluxes()
 }
 
 /** \brief Access an element of the map.
- * @param key An std::string.
+ * @param key A string.
  * @return The value associated with the input key.
  */
 double Fluxes::get(const char* key)

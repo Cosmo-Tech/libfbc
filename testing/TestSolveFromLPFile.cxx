@@ -11,5 +11,7 @@ int main (int argc, char *argv[])
   pbm.initFromLPFile(argv[1]);
   pbm.solveProblem();
   assert(floor(pbm.getSolution().getObjectiveValue()) == 6315.0);
+  assert(floor(pbm.getSolution().getFluxes().get("x")) == 21.0);
+  assert(floor(pbm.getSolution().getFluxes().get("y")) == 53.0);
   return 0;
 }

@@ -10,7 +10,6 @@ FBAProblem::FBAProblem()
 {
 }
 
-
 /** \brief Destructor.
  *
  */
@@ -187,8 +186,8 @@ void FBAProblem::printProblem()
  */
 void FBAProblem::solveProblem()
 {
-  solve(lpModel);
-  solution = fbc::Solution(lpModel);
+    solve(lpModel);
+    solution = fbc::Solution(lpModel);
 }
 
 }
