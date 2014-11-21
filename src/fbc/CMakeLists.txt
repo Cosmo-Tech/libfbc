@@ -10,6 +10,8 @@ set(LIBFBC_SOURCES
   ${FBC_SOURCE_DIR}/fbcFBAProblem.hxx
   ${FBC_SOURCE_DIR}/fbcSolution.cxx
   ${FBC_SOURCE_DIR}/fbcSolution.hxx
+  ${FBC_SOURCE_DIR}/fbcFluxes.cxx
+  ${FBC_SOURCE_DIR}/fbcFluxes.hxx
   CACHE PATH "libFBC source files" FORCE
 )
 

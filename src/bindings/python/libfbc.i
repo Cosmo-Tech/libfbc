@@ -2,9 +2,11 @@
 %{
 #include "../../fbc/fbcFBAProblem.hxx"
 #include "../../fbc/fbcSolution.hxx"
+#include "../../fbc/fbcFluxes.hxx"
 %}
 #include "../../fbc/fbcFBAProblem.hxx"
 #include "../../fbc/fbcSolution.hxx"
+#include "../../fbc/fbcFluxes.hxx"
 
 namespace fbc {
   class FBAProblem {
@@ -23,6 +25,12 @@ namespace fbc {
     public:
       Solution();
       double getObjectiveValue();
-      std::vector<double> getFluxes();
+      fbc::Fluxes getFluxes();
+  };
+
+  class Fluxes {
+    public:
+      Fluxes();
+      double get(const char* key);
   };
 }

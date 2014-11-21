@@ -21,11 +21,7 @@ Solution::Solution(lprec* solved_model)
   REAL pv[1+nrows+ncols];
   get_primal_solution(solved_model, pv);
   objectiveValue = pv[0];
-  // extracting fluxes
-  for (int i = nrows +1; i <= nrows + ncols; i++)
-  {
-    fluxes.push_back(pv[i]);
-  }
+  fluxes = fbc::Fluxes(solved_model);
 }
 
 /* \brief Destructor.
@@ -38,7 +34,7 @@ Solution::~Solution()
 /** \brief Getter.
  * @return fluxes
  */
-std::vector<double> Solution::getFluxes()
+fbc::Fluxes Solution::getFluxes()
 {
   return fluxes;
 }

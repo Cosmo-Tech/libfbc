@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "lp_lib.h"
+#include "fbcFluxes.hxx"
 
 namespace fbc
 {
@@ -12,13 +13,13 @@ class Solution
 {
   private:
     double objectiveValue;
-    std::vector<double> fluxes;
+    fbc::Fluxes fluxes;
   public:
     Solution();
     Solution(lprec* solved_model);
     ~Solution();
     double getObjectiveValue();
-    std::vector<double> getFluxes();
+    fbc::Fluxes getFluxes();
 };
 
 }
