@@ -140,7 +140,8 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
     // objective function
     for (int o = 0; o < obj->getNumFluxObjectives(); o++)
     {
-      const FluxObjective* fl_obj = obj->getFluxObjective(o);
+      FluxObjective* fl_obj =
+        const_cast<FluxObjective*>(obj->getFluxObjective(o));
       if (strcmp(rt->getId().c_str(), fl_obj->getReaction().c_str()) == 0)
       {
         col[0] = fl_obj->getCoefficient();
@@ -171,6 +172,33 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
     // name column after reaction id
     const std::string r_id = rt->getId();
     set_col_name(lpModel, r+1, const_cast<char*>(r_id.c_str()));
+    // populate map of column indices
+    colIndices[const_cast<char*>(r_id.c_str())] = r+1;
+  }
+  // edit reaction bounds
+  for (int b = 0; b < pl->getNumFluxBounds(); b++)
+  {
+    FluxBound* fb = pl->getFluxBound(b);
+    char* op = const_cast<char*>(fb->getOperation().c_str());
+    if (strcmp(op, "lessEqual") == 0)
+    {
+      set_upbo(lpModel, colIndices[fb->getReaction()], fb->getValue());
+    }
+    else if (strcmp(op, "greaterEqual") == 0)
+    {
+      set_lowbo(lpModel, colIndices[fb->getReaction()], fb->getValue());
+    }
+    else if (strcmp(op, "equal") == 0)
+    {
+      set_upbo(lpModel, colIndices[fb->getReaction()], fb->getValue());
+      set_lowbo(lpModel, colIndices[fb->getReaction()], fb->getValue());
+    }
+    else
+    {
+      std::cout << "Error: invalid " << op <<
+        " operation in fluxBound element " << fb->getId() << "\n";
+      exit(EXIT_FAILURE);
+    }
   }
 }
 

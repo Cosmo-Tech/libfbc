@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <map>
 #include "fbcSolution.hxx"
 #include "sbml/SBMLReader.h"
 #include "sbml/SBMLDocument.h"
@@ -24,6 +25,7 @@ class FBAProblem
   private:
     fbc::Solution solution;
     lprec* lpModel;
+    std::map<std::string,int> colIndices;
     void populateMatrix(Model* sb_model, FbcModelPlugin* pl);
   public:
     FBAProblem();
