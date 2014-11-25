@@ -75,3 +75,17 @@ add_library(lpsolve55-static STATIC ${SOURCES})
 target_link_libraries(lpsolve55-static ${CMAKE_DL_LIBS} m)
 add_library(lpsolve55 SHARED ${SOURCES})
 target_link_libraries(lpsolve55 ${CMAKE_DL_LIBS} m)
+
+# libfbc patch - install files
+INSTALL(TARGETS lpsolve55-static lpsolve55
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  )
+
+FILE(GLOB_RECURSE lp_solve_include_files "${LPSOLVE_SOURCE_DIR}/*.h")
+INSTALL(FILES ${lp_solve_include_files} DESTINATION include/lpsolve55)
+# Install documents
+set (LPSOLVE_INSTALL_DOCS)
+set (LPSOLVE_INSTALL_DOCS ${LPSOLVE_INSTALL_DOCS} ${LPSOLVE_SOURCE_DIR}/README.txt)
+INSTALL(FILES ${LPSOLVE_INSTALL_DOCS} DESTINATION share/lpsolve55)
