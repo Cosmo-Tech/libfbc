@@ -20,3 +20,11 @@ fbcAddTest(SolveFromSBMLFile TestSolveFromSBMLFile "FEBS_antimony.xml")
 add_executable(TestSolveFromSBMLString TestSolveFromSBMLString.cxx)
 target_link_libraries(TestSolveFromSBMLString fbc ${LIBSBML_LIBRARY})
 fbcAddTest(SolveFromSBMLString TestSolveFromSBMLString "FEBS_antimony.xml")
+
+add_executable(TestSetFluxBound TestSetFluxBound.cxx)
+target_link_libraries(TestSetFluxBound fbc)
+fbcAddTest(SetFluxBound TestSetFluxBound "FEBS_antimony.xml")
+
+add_executable(TestUnsetFluxBound TestUnsetFluxBound.cxx)
+target_link_libraries(TestUnsetFluxBound fbc)
+fbcAddTest(UnsetFluxBound TestUnsetFluxBound "FEBS_antimony.xml")

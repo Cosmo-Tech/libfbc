@@ -18,6 +18,17 @@ FBAProblem::~FBAProblem()
   delete_lp(lpModel);
 }
 
+/**
+ * @param reaction Identifier of the target reaction flux in the problem
+ * matrix.
+ * @return The value of the lower bound of the target reaction flux.
+ */
+double FBAProblem::getLowerFluxBound(const char* reaction)
+{
+  char* flux = const_cast<char*>(reaction);
+  return get_lowbo(lpModel, colIndices[flux]);
+}
+
 /** \brief Getter.
  * @return lpModel
  */
@@ -32,6 +43,17 @@ lprec* FBAProblem::getLpModel()
 fbc::Solution FBAProblem::getSolution()
 {
   return solution;
+}
+
+/**
+ * @param reaction Identifier of the target reaction flux in the problem
+ * matrix.
+ * @return The value of the upper bound of the target reaction flux.
+ */
+double FBAProblem::getUpperFluxBound(const char* reaction)
+{
+  char* flux = const_cast<char*>(reaction);
+  return get_upbo(lpModel, colIndices[flux]);
 }
 
 /** \brief Initializes this with the content of a LP file.
@@ -179,26 +201,8 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
   for (int b = 0; b < pl->getNumFluxBounds(); b++)
   {
     FluxBound* fb = pl->getFluxBound(b);
-    char* op = const_cast<char*>(fb->getOperation().c_str());
-    if (strcmp(op, "lessEqual") == 0)
-    {
-      set_upbo(lpModel, colIndices[fb->getReaction()], fb->getValue());
-    }
-    else if (strcmp(op, "greaterEqual") == 0)
-    {
-      set_lowbo(lpModel, colIndices[fb->getReaction()], fb->getValue());
-    }
-    else if (strcmp(op, "equal") == 0)
-    {
-      set_upbo(lpModel, colIndices[fb->getReaction()], fb->getValue());
-      set_lowbo(lpModel, colIndices[fb->getReaction()], fb->getValue());
-    }
-    else
-    {
-      std::cout << "Error: invalid " << op <<
-        " operation in fluxBound element " << fb->getId() << "\n";
-      exit(EXIT_FAILURE);
-    }
+    setFluxBound(fb->getReaction().c_str(), fb->getOperation().c_str(),
+      fb->getValue());
   }
 }
 
@@ -209,6 +213,37 @@ void FBAProblem::printProblem()
   print_lp(lpModel);
 }
 
+/** \brief Change the value of a flux bound.
+ * @param reaction Identifier of the reaction flux to be constrained.
+ * @param type Type of bound to be applied; can be 'lessEqual', 'greaterEqual'
+ * or 'equal'.
+ * @param value Value of the bound.
+ */
+void FBAProblem::setFluxBound(
+  const char* reaction, const char* type, double value)
+{
+  char* op = const_cast<char*>(type);
+  char* flux = const_cast<char*>(reaction);
+  if (strcmp(op, "lessEqual") == 0)
+  {
+    set_upbo(lpModel, colIndices[flux], value);
+  }
+  else if (strcmp(op, "greaterEqual") == 0)
+  {
+    set_lowbo(lpModel, colIndices[flux], value);
+  }
+  else if (strcmp(op, "equal") == 0)
+  {
+    set_upbo(lpModel, colIndices[flux], value);
+    set_lowbo(lpModel, colIndices[flux], value);
+  }
+  else
+  {
+    std::cout << "Error: " << op << " is not a valid flux bound type.\n";
+    exit(EXIT_FAILURE);
+  }
+}
+
 /** \brief Solves the linear problem encoded by this.
  * Solution will be stored in this->solution.
  */
@@ -216,6 +251,40 @@ void FBAProblem::solveProblem()
 {
     solve(lpModel);
     solution = fbc::Solution(lpModel);
+}
+
+/** \brief Set the target reaction flux free.
+ * Lower and upper bound for the target flux are respectively set to -Infinite
+ * and +Infinite.
+ * @param reaction Identifier of the target reaction flux in the problem
+ * matrix.
+ */
+void FBAProblem::unsetFluxBound(const char* reaction)
+{
+  char* flux = const_cast<char*>(reaction);
+  set_unbounded(lpModel, colIndices[flux]);
+}
+
+/** \brief Set the lower bound of the target reaction flux free.
+ * Lower flux bound is set to -Infinite.
+ * @param reaction Identifier of the target reaction flux in the problem
+ * matrix.
+ */
+void FBAProblem::unsetLowerFluxBound(const char* reaction)
+{
+  char* flux = const_cast<char*>(reaction);
+  set_lowbo(lpModel, colIndices[flux], -get_infinite(lpModel));
+}
+
+/** \brief Set the upper bound of the target reaction flux free.
+ * Lower flux bound is set to +Infinite.
+ * @param reaction Identifier of the target reaction flux in the problem
+ * matrix.
+ */
+void FBAProblem::unsetUpperFluxBound(const char* reaction)
+{
+  char* flux = const_cast<char*>(reaction);
+  set_upbo(lpModel, colIndices[flux], get_infinite(lpModel));
 }
 
 }
