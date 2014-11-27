@@ -143,7 +143,6 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
 {
   const Objective* obj = pl->getActiveObjective();
   const int num_species = sb_model->getNumSpecies();
-  std::cout << "num_species = " << num_species << "\n";
   problem->setLpModel(make_lp(num_species, 0));
   // set the objective direction
   if (

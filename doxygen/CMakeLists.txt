@@ -49,7 +49,7 @@ mark_as_advanced(FBC_DOXYGEN_WITH_SOURCES)
 
 # Configure documentation for the Engine
 if(FBC_DOXYGEN_WITH_SOURCES)
-  csmAddDoxygen("doxygen" "WithSources" "${LIBFBC_SOURCE_DIR}/src" YES)
+  csmAddDoxygen("doxygen" "WithSources" "${LIBFBC_SOURCE_DIR}/src/fbc" YES)
 else()
-  csmAddDoxygen("doxygen" "WithoutSources" "${LIBFBC_SOURCE_DIR}/src" NO)
+  csmAddDoxygen("doxygen" "WithoutSources" "${LIBFBC_SOURCE_DIR}/src/fbc" NO)
 endif()
