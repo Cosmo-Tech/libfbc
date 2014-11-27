@@ -13,8 +13,7 @@ namespace fbc {
     public:
       FBAProblem();
       double getLowerFluxBound(const char* reaction);
-      lprec* getLpModel();
-      fbc::Solution getSolution();
+      fbc::Solution* getSolution();
       double getUpperFluxBound(const char* reaction);
       void initFromLPFile(const char* file);
       void initFromSBMLFile(const char* file);
@@ -29,14 +28,12 @@ namespace fbc {
 
   class Solution {
     public:
-      Solution();
       double getObjectiveValue();
-      fbc::Fluxes getFluxes();
+      fbc::Fluxes* getFluxes();
   };
 
   class Fluxes {
     public:
-      Fluxes();
       double get(const char* key);
   };
 }

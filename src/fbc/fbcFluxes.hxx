@@ -4,10 +4,11 @@
 #include <map>
 #include <string>
 #include <iostream>
-#include "lp_lib.h"
 
 namespace fbc
 {
+
+class LPProblem;
 
 class Fluxes
 {
@@ -15,7 +16,7 @@ class Fluxes
     std::map<std::string,double> fluxes;
   public:
     Fluxes();
-    Fluxes(lprec* solved_model);
+    Fluxes(LPProblem* solved_model);
     ~Fluxes();
     double get(const char* key);
 };

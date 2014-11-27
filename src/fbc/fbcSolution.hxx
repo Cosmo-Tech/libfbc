@@ -3,23 +3,24 @@
 
 #include <vector>
 #include <iostream>
-#include "lp_lib.h"
 #include "fbcFluxes.hxx"
 
 namespace fbc
 {
 
+class LPProblem;
+
 class Solution
 {
   private:
     double objectiveValue;
-    fbc::Fluxes fluxes;
+    Fluxes fluxes;
   public:
     Solution();
-    Solution(lprec* solved_model);
+    Solution(LPProblem* solved_model);
     ~Solution();
     double getObjectiveValue();
-    fbc::Fluxes getFluxes();
+    Fluxes* getFluxes();
 };
 
 }
