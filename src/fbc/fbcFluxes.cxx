@@ -13,7 +13,9 @@ Fluxes::Fluxes()
 }
 
 /** \brief Constructor.
- * Extract flux keys and values from input "solved_model".
+ * Extract computed flux for each reaction implied in the input "solved_model".
+ * This will be internally stored as a map with reaction identifier as
+ * key and flux as value.
  * @param solved_model Pointer to a solved fbc::LPProblem model (i.e.
  * containing a solution).
  */
@@ -38,8 +40,9 @@ Fluxes::~Fluxes()
 }
 
 /** \brief Access an element of the map.
- * @param key A string.
- * @return The value associated with the input key.
+ * @param key A string corresponding to the identifier of the reaction of 
+ *            interest. For example, "r_NNNN".
+ * @return The value associated with the input key, i.e. the associated flux.
  */
 double Fluxes::get(const char* key)
 {
