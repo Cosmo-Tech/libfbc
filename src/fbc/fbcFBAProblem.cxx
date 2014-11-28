@@ -224,6 +224,11 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
     // name column after reaction id
     const std::string r_id = rt->getId();
     set_col_name(problem->getLpModel(), r+1, const_cast<char*>(r_id.c_str()));
+    // if reaction is reversible, flux is unbounded
+    if (rt->getReversible())
+    {
+      set_unbounded(problem->getLpModel(), r+1);
+    }
     // populate map of column indices
     colIndices[const_cast<char*>(r_id.c_str())] = r+1;
   }
