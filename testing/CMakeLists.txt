@@ -28,3 +28,11 @@ fbcAddTest(SetFluxBound TestSetFluxBound "FEBS_antimony.xml")
 add_executable(TestUnsetFluxBound TestUnsetFluxBound.cxx)
 target_link_libraries(TestUnsetFluxBound fbc)
 fbcAddTest(UnsetFluxBound TestUnsetFluxBound "FEBS_antimony.xml")
+
+add_executable(TestChangeObjectiveFunction TestChangeObjectiveFunction.cxx)
+target_link_libraries(TestChangeObjectiveFunction fbc)
+fbcAddTest(ChangeObjectiveFunction TestChangeObjectiveFunction "FEBS_antimony.xml")
+
+add_executable(TestChangeObjectiveSense TestChangeObjectiveSense.cxx)
+target_link_libraries(TestChangeObjectiveSense fbc)
+fbcAddTest(ChangeObjectiveSense TestChangeObjectiveSense "FEBS_antimony.xml")

@@ -43,6 +43,38 @@ double FBAProblem::getLowerFluxBound(const char* reaction)
   return get_lowbo(problem->getLpModel(), colIndices[flux]);
 }
 
+/** /brief Returns the objective function as a vector of double values.
+ * The objective function is a linear combination of any reaction available in
+ * the model; for instance, if [R0, R1, R2, R3] is a vector of reaction, the
+ * objective vector [0, 2, 1, 0] defines the objective function 2*R1 + R2.
+ * @return vec A vector of double values.
+ */
+std::vector<double> FBAProblem::getObjective()
+{
+  int num_reactions = get_Ncolumns(problem->getLpModel());
+  double row[num_reactions + 1];
+  get_row(problem->getLpModel(), 0, row);
+  std::vector<double> vec(row, row + num_reactions + 1);
+  vec.erase(vec.begin()); // remove first element
+  return vec;
+}
+
+/** /brief Returns the objective function sense.
+ * @return vec A string value representing the objective function sense
+ * ('maximize' or 'minimize').
+ */
+const char* FBAProblem::getObjectiveSense()
+{
+  if (is_maxim(problem->getLpModel()))
+  {
+    return "maximize";
+  }
+  else
+  {
+    return "minimize";
+  }
+}
+
 /** \brief Getter.
  * @return solution
  */
@@ -144,16 +176,8 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
   const Objective* obj = pl->getActiveObjective();
   const int num_species = sb_model->getNumSpecies();
   problem->setLpModel(make_lp(num_species, 0));
-  // set the objective direction
-  if (
-    strcmp(const_cast<Objective*>(obj)->getType().c_str(), "maximize") == 0)
-  {
-    set_maxim(problem->getLpModel());
-  }
-  else
-  {
-    set_minim(problem->getLpModel());
-  }
+  // set the objective sense
+  setObjectiveSense(const_cast<Objective*>(obj)->getType().c_str());
   // names rows after the species ids - row 0 is the objective function
   for (int i = 0; i < num_species; i++)
   {
@@ -246,6 +270,55 @@ void FBAProblem::setFluxBound(
   else
   {
     std::cout << "Error: " << op << " is not a valid flux bound type.\n";
+    exit(EXIT_FAILURE);
+  }
+}
+
+/** /brief Set the value of the objective function in the problem matrix.
+ * The objective function is a linear combination of any reaction available in
+ * the model; for instance, if [R0, R1, R2, R3] is a vector of reaction, the
+ * objective vector [0, 2, 1, 0] defines the objective function 2*R1 + R2.
+ * @param objective A vector of double values.
+ */
+void FBAProblem::setObjective(std::vector<double> objective)
+{
+  // input vector must contain as many elements as the number of reactions in
+  // LP model
+  int num_reactions = get_Ncolumns(problem->getLpModel());
+  if (num_reactions == objective.size())
+  {
+    objective.insert(objective.begin(), 0.0);
+    double obj[objective.size()];
+    std::copy(objective.begin(), objective.end(), obj);
+    set_row(problem->getLpModel(), 0, obj);
+  }
+  else
+  {
+    std::cout << "Error: input vector size is " << objective.size() <<
+      "; expected size: " << num_reactions << ".\n";
+    exit(EXIT_FAILURE);
+  }
+}
+
+/** /brief Set the optimization sense for the objective function.
+ * @param sense A string indicating the sense of the objective function (
+ * can be either 'maximize' or 'minimize').
+ */
+void FBAProblem::setObjectiveSense(const char* sense)
+{
+  char* sns = const_cast<char*>(sense);
+  if (strcmp(sns, "maximize") == 0)
+  {
+    set_maxim(problem->getLpModel());
+  }
+  else if (strcmp(sns, "minimize") == 0)
+  {
+    set_minim(problem->getLpModel());
+  }
+  else
+  {
+    std::cout << "Error: " << sns << " is not a valid objective sense. " <<
+      "Valid values are 'maximize' or 'minimize'.\n";
     exit(EXIT_FAILURE);
   }
 }

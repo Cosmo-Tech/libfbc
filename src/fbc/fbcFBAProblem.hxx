@@ -27,6 +27,8 @@ class FBAProblem
     FBAProblem();
     ~FBAProblem();
     double getLowerFluxBound(const char* reaction);
+    std::vector<double> getObjective();
+    const char* getObjectiveSense();
     Solution* getSolution();
     double getUpperFluxBound(const char* reaction);
     void initFromLPFile(const char* file);
@@ -34,6 +36,8 @@ class FBAProblem
     void initFromSBMLString(const char* string);
     void printProblem();
     void setFluxBound(const char* reaction, const char* type, double value);
+    void setObjective(std::vector<double> objective);
+    void setObjectiveSense(const char* sense);
     void solveProblem();
     void unsetFluxBound(const char* reaction);
     void unsetLowerFluxBound(const char* reaction);
