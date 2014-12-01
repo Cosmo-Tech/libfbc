@@ -22,6 +22,7 @@ class FBAProblem
     Solution solution;
     LPProblem* problem;
     std::map<std::string,int> colIndices;
+    void initFromSBML(Model* sb_model);
     void populateMatrix(Model* sb_model, FbcModelPlugin* pl);
   public:
     FBAProblem();

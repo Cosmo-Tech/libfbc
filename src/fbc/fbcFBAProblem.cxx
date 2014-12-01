@@ -105,6 +105,22 @@ void FBAProblem::initFromLPFile(const char* file)
   problem->setLpModel(read_LP(const_cast<char*>(file), NORMAL, ""));
 }
 
+/** \brief Acquire mandatory FBC plugin before populating matrix.
+ * @param sb_model Pointer to an SBML Model instance.
+ */
+void FBAProblem::initFromSBML(Model* sb_model)
+{
+  // acquire FBC plugin - mandatory
+  FbcModelPlugin* pl =
+    dynamic_cast<FbcModelPlugin*>(sb_model->getPlugin("fbc"));
+  if (pl == NULL)
+  {
+    std::cout << "Error: no FBC plugin found.\n";
+    exit(EXIT_FAILURE);
+  }
+  populateMatrix(sb_model, pl);
+}
+
 /** \brief Initializes this with the content of a SBML file.
  * The Systems Biology Markup Language (SBML) is an XML-based descriptive
  * language for systems biology. Specifications of its latest version can be
@@ -115,25 +131,22 @@ void FBAProblem::initFromSBMLFile(const char* file)
 {
   SBMLReader reader = SBMLReader();
   SBMLDocument* doc = reader.readSBMLFromFile(file);
-  if (doc->getNumErrors() > 0)
+  if (doc->getNumErrors(2) > 0 || doc->getNumErrors(3) > 0)
   {
     std::cout << "Error " << doc->getError(0)->getErrorId() << " at line " <<
       doc->getError(0)->getLine() << " when opening file " << file << ": " <<
       doc->getError(0)->getMessage() << "\n";
     exit(EXIT_FAILURE);
   }
+  else if (doc->getNumErrors(0) > 0 || doc->getNumErrors(1) > 0)
+  {
+    std::cout << doc->getNumErrors(0) + doc->getNumErrors(1) << " warnings" <<
+      " returned when opening file " << file << ".\n";
+    initFromSBML(doc->getModel());
+  }
   else
   {
-    Model* sb_model = doc->getModel();
-    // acquire FBC plugin - mandatory
-    FbcModelPlugin* pl =
-      dynamic_cast<FbcModelPlugin*>(sb_model->getPlugin("fbc"));
-    if (pl == NULL)
-    {
-      std::cout << "Error: no FBC plugin found in " << file;
-      exit(EXIT_FAILURE);
-    }
-    populateMatrix(sb_model, pl);
+    initFromSBML(doc->getModel());
   }
 }
 
@@ -147,23 +160,22 @@ void FBAProblem::initFromSBMLString(const char* string)
 {
   SBMLReader reader = SBMLReader();
   SBMLDocument* doc = reader.readSBMLFromString(string);
-  if (doc->getNumErrors() > 0)
+  if (doc->getNumErrors(2) > 0 || doc->getNumErrors(3) > 0)
   {
     std::cout << "Error " << doc->getError(0)->getErrorId() << " at line " <<
-      doc->getError(0)->getLine() << " when opening input string";
+      doc->getError(0)->getLine() << " when opening input string: " <<
+      doc->getError(0)->getMessage() << "\n";
+    exit(EXIT_FAILURE);
+  }
+  else if (doc->getNumErrors(0) > 0 || doc->getNumErrors(1) > 0)
+  {
+    std::cout << doc->getNumErrors(0) + doc->getNumErrors(1) << " warnings" <<
+      " returned when opening input string.\n";
+    initFromSBML(doc->getModel());
   }
   else
   {
-    Model* sb_model = doc->getModel();
-    // acquire FBC plugin - mandatory
-    FbcModelPlugin* pl =
-      dynamic_cast<FbcModelPlugin*>(sb_model->getPlugin("fbc"));
-    if (pl == NULL)
-    {
-      std::cout << "Error: no FBC plugin found.";
-      exit(EXIT_FAILURE);
-    }
-    populateMatrix(sb_model, pl);
+    initFromSBML(doc->getModel());
   }
 }
 
