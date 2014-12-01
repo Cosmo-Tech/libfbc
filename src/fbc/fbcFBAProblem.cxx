@@ -7,11 +7,13 @@
 #include "sbml/Model.h"
 #include "sbml/Reaction.h"
 #include "sbml/Model.h"
+#include "sbml/util/List.h"
 #include "sbml/packages/fbc/extension/FbcModelPlugin.h"
 #include "sbml/packages/fbc/sbml/Objective.h"
 #include "sbml/packages/fbc/sbml/FluxObjective.h"
 
 #include "fbcSolution.hxx"
+#include "fbcBoundaryConditionFilter.hxx"
 
 namespace fbc
 {
@@ -186,14 +188,17 @@ void FBAProblem::initFromSBMLString(const char* string)
 void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
 {
   const Objective* obj = pl->getActiveObjective();
-  const int num_species = sb_model->getNumSpecies();
+  BoundaryConditionFilter flt; // filter out boundary conditions
+  List* species = sb_model->getListOfSpecies()->getAllElements(&flt);
+  int num_species = species->getSize();
   problem->setLpModel(make_lp(num_species, 0));
   // set the objective sense
   setObjectiveSense(const_cast<Objective*>(obj)->getType().c_str());
   // names rows after the species ids - row 0 is the objective function
   for (int i = 0; i < num_species; i++)
-  {
-    const std::string id = sb_model->getSpecies(i)->getId();
+  {  
+    Species* sp = (Species*) species->get(i);
+    const std::string id = sp->getId();
     set_row_name(problem->getLpModel(), i+1, const_cast<char*>(id.c_str()));
   }
   // populate problem matrix
