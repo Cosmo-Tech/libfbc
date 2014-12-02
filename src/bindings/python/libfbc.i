@@ -18,6 +18,7 @@ namespace fbc {
       std::vector<double> getObjective();
       const char* getObjectiveSense();
       fbc::Solution* getSolution();
+      int getTimeOut();
       double getUpperFluxBound(const char* reaction);
       void initFromLPFile(const char* file);
       void initFromSBMLFile(const char* file);
@@ -26,10 +27,12 @@ namespace fbc {
       void setFluxBound(const char* reaction, const char* type, double value);
       void setObjective(std::vector<double> objective);
       void setObjectiveSense(const char* sense);
+      void setTimeOut(int timeout);
       void solveProblem();
       void unsetFluxBound(const char* reaction);
       void unsetLowerFluxBound(const char* reaction);
       void unsetUpperFluxBound(const char* reaction);
+      void writeProblem(const char* file);
   };
 
   class Solution {

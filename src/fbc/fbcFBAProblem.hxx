@@ -19,9 +19,10 @@ class LPProblem;
 class FBAProblem
 {
   private:
-    Solution solution;
-    LPProblem* problem;
     std::map<std::string,int> colIndices;
+    LPProblem* problem;
+    Solution solution;
+    int timeOut;
     void initFromSBML(Model* sb_model);
     void populateMatrix(Model* sb_model, FbcModelPlugin* pl);
   public:
@@ -31,6 +32,7 @@ class FBAProblem
     std::vector<double> getObjective();
     const char* getObjectiveSense();
     Solution* getSolution();
+    int getTimeOut();
     double getUpperFluxBound(const char* reaction);
     void initFromLPFile(const char* file);
     void initFromSBMLFile(const char* file);
@@ -39,10 +41,12 @@ class FBAProblem
     void setFluxBound(const char* reaction, const char* type, double value);
     void setObjective(std::vector<double> objective);
     void setObjectiveSense(const char* sense);
+    void setTimeOut(int timeout);
     void solveProblem();
     void unsetFluxBound(const char* reaction);
     void unsetLowerFluxBound(const char* reaction);
     void unsetUpperFluxBound(const char* reaction);
+    void writeProblem(const char* file);
 };
 
 }

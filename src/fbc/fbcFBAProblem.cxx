@@ -24,6 +24,7 @@ namespace fbc
 FBAProblem::FBAProblem()
 {
   problem = new LPProblem;
+  timeOut = 60;
 }
 
 /** \brief Destructor.
@@ -83,6 +84,14 @@ const char* FBAProblem::getObjectiveSense()
 Solution* FBAProblem::getSolution()
 {
   return &solution;
+}
+
+/** \brief Getter.
+ * @return timeOut
+ */
+int FBAProblem::getTimeOut()
+{
+  return timeOut;
 }
 
 /**
@@ -200,6 +209,7 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
     Species* sp = (Species*) species->get(i);
     const std::string id = sp->getId();
     set_row_name(problem->getLpModel(), i+1, const_cast<char*>(id.c_str()));
+    set_constr_type(problem->getLpModel(), i+1, EQ);
   }
   // populate problem matrix
   for (int r = 0; r < sb_model->getNumReactions(); r++)
@@ -345,13 +355,24 @@ void FBAProblem::setObjectiveSense(const char* sense)
   }
 }
 
+/** /brief Set the value of lp_solve time out.
+ * @param timeout An integer value.
+ */
+void FBAProblem::setTimeOut(int timeout)
+{
+  timeOut = timeout;
+}
+
 /** \brief Solves the linear problem encoded by this.
  * Solution will be stored in this->solution.
  */
 void FBAProblem::solveProblem()
 {
-    solve(problem->getLpModel());
-    solution = Solution(problem);
+  set_presolve(problem->getLpModel(), PRESOLVE_ROWS | PRESOLVE_COLS,
+    get_presolveloops(problem->getLpModel()));
+  set_timeout(problem->getLpModel(), timeOut);
+  solve(problem->getLpModel());
+  solution = Solution(problem);
 }
 
 /** \brief Set the target reaction flux free.
@@ -388,6 +409,14 @@ void FBAProblem::unsetUpperFluxBound(const char* reaction)
   char* flux = const_cast<char*>(reaction);
   set_upbo(problem->getLpModel(), colIndices[flux],
     get_infinite(problem->getLpModel()));
+}
+
+/** \brief Write the LP problem in the input file.
+ * @param file Address of the file where the problem should be written.
+ */
+void FBAProblem::writeProblem(const char* file)
+{
+  write_lp(problem->getLpModel(), const_cast<char*>(file));
 }
 
 }
