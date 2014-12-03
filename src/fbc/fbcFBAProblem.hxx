@@ -20,6 +20,7 @@ class FBAProblem
 {
   private:
     std::map<std::string,int> colIndices;
+    int preSolveSettings;
     LPProblem* problem;
     Solution solution;
     int timeOut;
@@ -31,6 +32,7 @@ class FBAProblem
     double getLowerFluxBound(const char* reaction);
     std::vector<double> getObjective();
     const char* getObjectiveSense();
+    int getPreSolveSettings();
     Solution* getSolution();
     int getTimeOut();
     double getUpperFluxBound(const char* reaction);
@@ -41,6 +43,7 @@ class FBAProblem
     void setFluxBound(const char* reaction, const char* type, double value);
     void setObjective(std::vector<double> objective);
     void setObjectiveSense(const char* sense);
+    void setPreSolveSettings(int settings);
     void setTimeOut(int timeout);
     void solveProblem();
     void unsetFluxBound(const char* reaction);

@@ -17,6 +17,7 @@ namespace fbc {
       double getLowerFluxBound(const char* reaction);
       std::vector<double> getObjective();
       const char* getObjectiveSense();
+      int getPreSolveSettings();
       fbc::Solution* getSolution();
       int getTimeOut();
       double getUpperFluxBound(const char* reaction);
@@ -27,6 +28,7 @@ namespace fbc {
       void setFluxBound(const char* reaction, const char* type, double value);
       void setObjective(std::vector<double> objective);
       void setObjectiveSense(const char* sense);
+      void setPreSolveSettings(int settings);
       void setTimeOut(int timeout);
       void solveProblem();
       void unsetFluxBound(const char* reaction);

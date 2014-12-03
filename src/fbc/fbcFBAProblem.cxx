@@ -25,6 +25,7 @@ FBAProblem::FBAProblem()
 {
   problem = new LPProblem;
   timeOut = 60;
+  preSolveSettings = PRESOLVE_ROWS | PRESOLVE_COLS;
 }
 
 /** \brief Destructor.
@@ -35,10 +36,10 @@ FBAProblem::~FBAProblem()
   delete problem;
 }
 
-/**
+/** \brief Returns the value of the lower bound of the target reaction flux.
  * @param reaction Identifier of the target reaction flux in the problem
  * matrix.
- * @return The value of the lower bound of the target reaction flux.
+ * @return The flux bound value as a double.
  */
 double FBAProblem::getLowerFluxBound(const char* reaction)
 {
@@ -46,7 +47,8 @@ double FBAProblem::getLowerFluxBound(const char* reaction)
   return get_lowbo(problem->getLpModel(), colIndices[flux]);
 }
 
-/** /brief Returns the objective function as a vector of double values.
+/** \brief Returns the objective function as a vector of double values.
+ *
  * The objective function is a linear combination of any reaction available in
  * the model; for instance, if [R0, R1, R2, R3] is a vector of reaction, the
  * objective vector [0, 2, 1, 0] defines the objective function 2*R1 + R2.
@@ -62,7 +64,7 @@ std::vector<double> FBAProblem::getObjective()
   return vec;
 }
 
-/** /brief Returns the objective function sense.
+/** \brief Returns the objective function sense.
  * @return vec A string value representing the objective function sense
  * ('maximize' or 'minimize').
  */
@@ -76,6 +78,14 @@ const char* FBAProblem::getObjectiveSense()
   {
     return "minimize";
   }
+}
+
+/** \brief Returns the presolve level to be applied before solving the problem.
+ * @return An integer value representing the presolve level in lp_solve.
+ */
+int FBAProblem::getPreSolveSettings()
+{
+  return preSolveSettings;
 }
 
 /** \brief Getter.
@@ -94,10 +104,10 @@ int FBAProblem::getTimeOut()
   return timeOut;
 }
 
-/**
+/** \brief Returns the value of the upper bound of the target reaction flux.
  * @param reaction Identifier of the target reaction flux in the problem
  * matrix.
- * @return The value of the upper bound of the target reaction flux.
+ * @return The flux bound value as a double.
  */
 double FBAProblem::getUpperFluxBound(const char* reaction)
 {
@@ -106,6 +116,7 @@ double FBAProblem::getUpperFluxBound(const char* reaction)
 }
 
 /** \brief Initializes this with the content of a LP file.
+ *
  * The lp-format is a file format for describing linear programming problems in
  * lp_solve; its complete description can be found in the lp_solve reference
  * guide at http://lpsolve.sourceforge.net/.
@@ -133,6 +144,7 @@ void FBAProblem::initFromSBML(Model* sb_model)
 }
 
 /** \brief Initializes this with the content of a SBML file.
+ *
  * The Systems Biology Markup Language (SBML) is an XML-based descriptive
  * language for systems biology. Specifications of its latest version can be
  * found at http://sbml.org.
@@ -162,6 +174,7 @@ void FBAProblem::initFromSBMLFile(const char* file)
 }
 
 /** \brief Initializes this with a SBML string.
+ *
  * The Systems Biology Markup Language (SBML) is an XML-based descriptive
  * language for systems biology. Specifications of its latest version can be
  * found at http://sbml.org.
@@ -191,6 +204,7 @@ void FBAProblem::initFromSBMLString(const char* string)
 }
 
 /** \brief Fill the matrix of the linear problem.
+ *
  * @param sb_model A Model object describing the problem to be solved.
  * @param pl A FbcModelPlugin object corresponding to sb_model.
  */
@@ -306,7 +320,8 @@ void FBAProblem::setFluxBound(
   }
 }
 
-/** /brief Set the value of the objective function in the problem matrix.
+/** \brief Set the value of the objective function in the problem matrix.
+ *
  * The objective function is a linear combination of any reaction available in
  * the model; for instance, if [R0, R1, R2, R3] is a vector of reaction, the
  * objective vector [0, 2, 1, 0] defines the objective function 2*R1 + R2.
@@ -332,7 +347,7 @@ void FBAProblem::setObjective(std::vector<double> objective)
   }
 }
 
-/** /brief Set the optimization sense for the objective function.
+/** \brief Set the optimization sense for the objective function.
  * @param sense A string indicating the sense of the objective function (
  * can be either 'maximize' or 'minimize').
  */
@@ -355,7 +370,15 @@ void FBAProblem::setObjectiveSense(const char* sense)
   }
 }
 
-/** /brief Set the value of lp_solve time out.
+/** \brief Sets the value of preSolveSettings.
+ * @param settings Value of the settings to be applied.
+ */
+void FBAProblem::setPreSolveSettings(int settings)
+{
+  preSolveSettings = settings;
+}
+
+/** \brief Set the value of lp_solve time out.
  * @param timeout An integer value.
  */
 void FBAProblem::setTimeOut(int timeout)
@@ -364,11 +387,12 @@ void FBAProblem::setTimeOut(int timeout)
 }
 
 /** \brief Solves the linear problem encoded by this.
+ *
  * Solution will be stored in this->solution.
  */
 void FBAProblem::solveProblem()
 {
-  set_presolve(problem->getLpModel(), PRESOLVE_ROWS | PRESOLVE_COLS,
+  set_presolve(problem->getLpModel(), preSolveSettings,
     get_presolveloops(problem->getLpModel()));
   set_timeout(problem->getLpModel(), timeOut);
   solve(problem->getLpModel());
@@ -376,6 +400,7 @@ void FBAProblem::solveProblem()
 }
 
 /** \brief Set the target reaction flux free.
+ *
  * Lower and upper bound for the target flux are respectively set to -Infinite
  * and +Infinite.
  * @param reaction Identifier of the target reaction flux in the problem
@@ -388,6 +413,7 @@ void FBAProblem::unsetFluxBound(const char* reaction)
 }
 
 /** \brief Set the lower bound of the target reaction flux free.
+ *
  * Lower flux bound is set to -Infinite.
  * @param reaction Identifier of the target reaction flux in the problem
  * matrix.
@@ -400,6 +426,7 @@ void FBAProblem::unsetLowerFluxBound(const char* reaction)
 }
 
 /** \brief Set the upper bound of the target reaction flux free.
+ *
  * Lower flux bound is set to +Infinite.
  * @param reaction Identifier of the target reaction flux in the problem
  * matrix.

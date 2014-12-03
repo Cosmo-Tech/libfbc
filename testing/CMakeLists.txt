@@ -36,3 +36,7 @@ fbcAddTest(ChangeObjectiveFunction TestChangeObjectiveFunction "FEBS_antimony.xm
 add_executable(TestChangeObjectiveSense TestChangeObjectiveSense.cxx)
 target_link_libraries(TestChangeObjectiveSense fbc)
 fbcAddTest(ChangeObjectiveSense TestChangeObjectiveSense "FEBS_antimony.xml")
+
+add_executable(TestSetPreSolveSettings TestSetPreSolveSettings.cxx)
+target_link_libraries(TestSetPreSolveSettings fbc)
+fbcAddTest(SetPreSolveSettings TestSetPreSolveSettings "salmonella_fbc.xml")
