@@ -10,6 +10,7 @@
 
 class Model;
 class FbcModelPlugin;
+class List;
 
 namespace fbc
 {
@@ -19,7 +20,8 @@ class LPProblem;
 class FBAProblem
 {
   private:
-    std::map<std::string,int> colIndices;
+    List* exchangeFluxList;
+    List* fluxList;
     int preSolveSettings;
     LPProblem* problem;
     Solution solution;
@@ -36,7 +38,6 @@ class FBAProblem
     Solution* getSolution();
     int getTimeOut();
     double getUpperFluxBound(const char* reaction);
-    void initFromLPFile(const char* file);
     void initFromSBMLFile(const char* file);
     void initFromSBMLString(const char* string);
     void printProblem();

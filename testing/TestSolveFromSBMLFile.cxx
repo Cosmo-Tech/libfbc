@@ -11,5 +11,6 @@ int main (int argc, char *argv[])
   fbc::FBAProblem pbm;
   pbm.initFromSBMLFile(argv[1]);
   pbm.solveProblem();
+  assert(floor(100 * pbm.getSolution()->getObjectiveValue()) == 38);
   return 0;
 }

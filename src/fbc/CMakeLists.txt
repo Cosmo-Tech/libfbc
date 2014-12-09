@@ -14,8 +14,14 @@ set(LIBFBC_SOURCES
   ${FBC_SOURCE_DIR}/fbcFluxes.hxx
   ${FBC_SOURCE_DIR}/fbcLPProblem.cxx
   ${FBC_SOURCE_DIR}/fbcLPProblem.hxx
+  ${FBC_SOURCE_DIR}/fbcNonBoundaryConditionFilter.cxx
+  ${FBC_SOURCE_DIR}/fbcNonBoundaryConditionFilter.hxx
   ${FBC_SOURCE_DIR}/fbcBoundaryConditionFilter.cxx
   ${FBC_SOURCE_DIR}/fbcBoundaryConditionFilter.hxx
+  ${FBC_SOURCE_DIR}/fbcExchangeReactionFilter.cxx
+  ${FBC_SOURCE_DIR}/fbcExchangeReactionFilter.hxx
+  ${FBC_SOURCE_DIR}/fbcReactionFilter.cxx
+  ${FBC_SOURCE_DIR}/fbcReactionFilter.hxx
   CACHE PATH "libFBC source files" FORCE
 )
 

@@ -14,6 +14,9 @@
 
 #include "fbcSolution.hxx"
 #include "fbcBoundaryConditionFilter.hxx"
+#include "fbcNonBoundaryConditionFilter.hxx"
+#include "fbcExchangeReactionFilter.hxx"
+#include "fbcReactionFilter.hxx"
 
 namespace fbc
 {
@@ -44,7 +47,8 @@ FBAProblem::~FBAProblem()
 double FBAProblem::getLowerFluxBound(const char* reaction)
 {
   char* flux = const_cast<char*>(reaction);
-  return get_lowbo(problem->getLpModel(), colIndices[flux]);
+  return get_lowbo(problem->getLpModel(),
+    get_nameindex(problem->getLpModel(), flux, 0));
 }
 
 /** \brief Returns the objective function as a vector of double values.
@@ -112,19 +116,8 @@ int FBAProblem::getTimeOut()
 double FBAProblem::getUpperFluxBound(const char* reaction)
 {
   char* flux = const_cast<char*>(reaction);
-  return get_upbo(problem->getLpModel(), colIndices[flux]);
-}
-
-/** \brief Initializes this with the content of a LP file.
- *
- * The lp-format is a file format for describing linear programming problems in
- * lp_solve; its complete description can be found in the lp_solve reference
- * guide at http://lpsolve.sourceforge.net/.
- * @param file Address of a LP file.
- */
-void FBAProblem::initFromLPFile(const char* file)
-{
-  problem->setLpModel(read_LP(const_cast<char*>(file), NORMAL, ""));
+  return get_upbo(problem->getLpModel(),
+    get_nameindex(problem->getLpModel(), flux, 0));
 }
 
 /** \brief Acquire mandatory FBC plugin before populating matrix.
@@ -210,17 +203,26 @@ void FBAProblem::initFromSBMLString(const char* string)
  */
 void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
 {
+  // declaring filters, create lists of boundary / non-boundary species
+  NonBoundaryConditionFilter non_bc_flt;
+  BoundaryConditionFilter bc_flt;
+  ReactionFilter r_flt;
+  List* non_bc = sb_model->getListOfSpecies()->getAllElements(&non_bc_flt);
+  List* bc = sb_model->getListOfSpecies()->getAllElements(&bc_flt);
+  ExchangeReactionFilter er_flt = ExchangeReactionFilter(bc);
+  // initialize "exchangeFluxList" and "fluxList" attributes
+  exchangeFluxList = sb_model->getListOfReactions()->getAllElements(&er_flt);
+  fluxList = sb_model->getListOfReactions()->getAllElements(&r_flt);
+  // build "problem"
   const Objective* obj = pl->getActiveObjective();
-  BoundaryConditionFilter flt; // filter out boundary conditions
-  List* species = sb_model->getListOfSpecies()->getAllElements(&flt);
-  int num_species = species->getSize();
+  int num_species = non_bc->getSize();
   problem->setLpModel(make_lp(num_species, 0));
   // set the objective sense
   setObjectiveSense(const_cast<Objective*>(obj)->getType().c_str());
   // names rows after the species ids - row 0 is the objective function
   for (int i = 0; i < num_species; i++)
   {  
-    Species* sp = (Species*) species->get(i);
+    Species* sp = (Species*) non_bc->get(i);
     const std::string id = sp->getId();
     set_row_name(problem->getLpModel(), i+1, const_cast<char*>(id.c_str()));
     set_constr_type(problem->getLpModel(), i+1, EQ);
@@ -270,8 +272,6 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
     {
       set_unbounded(problem->getLpModel(), r+1);
     }
-    // populate map of column indices
-    colIndices[const_cast<char*>(r_id.c_str())] = r+1;
   }
   // edit reaction bounds
   for (int b = 0; b < pl->getNumFluxBounds(); b++)
@@ -300,18 +300,19 @@ void FBAProblem::setFluxBound(
 {
   char* op = const_cast<char*>(type);
   char* flux = const_cast<char*>(reaction);
+  int colIndex = get_nameindex(problem->getLpModel(), flux, 0);
   if (strcmp(op, "lessEqual") == 0)
   {
-    set_upbo(problem->getLpModel(), colIndices[flux], value);
+    set_upbo(problem->getLpModel(), colIndex, value);
   }
   else if (strcmp(op, "greaterEqual") == 0)
   {
-    set_lowbo(problem->getLpModel(), colIndices[flux], value);
+    set_lowbo(problem->getLpModel(), colIndex, value);
   }
   else if (strcmp(op, "equal") == 0)
   {
-    set_upbo(problem->getLpModel(), colIndices[flux], value);
-    set_lowbo(problem->getLpModel(), colIndices[flux], value);
+    set_upbo(problem->getLpModel(), colIndex, value);
+    set_lowbo(problem->getLpModel(), colIndex, value);
   }
   else
   {
@@ -391,12 +392,12 @@ void FBAProblem::setTimeOut(int timeout)
  * Solution will be stored in this->solution.
  */
 void FBAProblem::solveProblem()
-{
+{ // TODO - copy the problem before presolving it and delete it after resolution
   set_presolve(problem->getLpModel(), preSolveSettings,
     get_presolveloops(problem->getLpModel()));
   set_timeout(problem->getLpModel(), timeOut);
   solve(problem->getLpModel());
-  solution = Solution(problem);
+  solution = Solution(problem, fluxList, exchangeFluxList);
 }
 
 /** \brief Set the target reaction flux free.
@@ -409,7 +410,8 @@ void FBAProblem::solveProblem()
 void FBAProblem::unsetFluxBound(const char* reaction)
 {
   char* flux = const_cast<char*>(reaction);
-  set_unbounded(problem->getLpModel(), colIndices[flux]);
+  set_unbounded(problem->getLpModel(),
+    get_nameindex(problem->getLpModel(), flux, 0));
 }
 
 /** \brief Set the lower bound of the target reaction flux free.
@@ -421,7 +423,8 @@ void FBAProblem::unsetFluxBound(const char* reaction)
 void FBAProblem::unsetLowerFluxBound(const char* reaction)
 {
   char* flux = const_cast<char*>(reaction);
-  set_lowbo(problem->getLpModel(), colIndices[flux],
+  set_lowbo(problem->getLpModel(),
+    get_nameindex(problem->getLpModel(), flux, 0),
     -get_infinite(problem->getLpModel()));
 }
 
@@ -434,7 +437,8 @@ void FBAProblem::unsetLowerFluxBound(const char* reaction)
 void FBAProblem::unsetUpperFluxBound(const char* reaction)
 {
   char* flux = const_cast<char*>(reaction);
-  set_upbo(problem->getLpModel(), colIndices[flux],
+  set_upbo(problem->getLpModel(),
+    get_nameindex(problem->getLpModel(), flux, 0),
     get_infinite(problem->getLpModel()));
 }
 

@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 
+class List;
+
 namespace fbc
 {
 
@@ -16,9 +18,11 @@ class Fluxes
     std::map<std::string,double> fluxes;
   public:
     Fluxes();
-    Fluxes(LPProblem* solved_model);
+    Fluxes(LPProblem* solved_model, List* r_lst);
+    Fluxes(Fluxes* fl, List* er_lst);
     ~Fluxes();
     double get(const char* key);
+    int size();
 };
 
 }
