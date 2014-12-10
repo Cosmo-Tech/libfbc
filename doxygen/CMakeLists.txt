@@ -1,7 +1,7 @@
 # Dependencies
 find_package(Doxygen REQUIRED)
 
-macro(csmAddDoxygen a_Name a_DstDir a_SrcFilesOrDirs a_WithSources)
+macro(addDoxygen a_Name a_DstDir a_SrcFilesOrDirs a_WithSources)
   set(DOXYGEN_PROJECT ${a_Name})
   set(DOXYGEN_PROJECT_SRC)
   foreach(fileOrDir ${a_SrcFilesOrDirs})
@@ -49,7 +49,7 @@ mark_as_advanced(FBC_DOXYGEN_WITH_SOURCES)
 
 # Configure documentation for the Engine
 if(FBC_DOXYGEN_WITH_SOURCES)
-  csmAddDoxygen("doxygen" "WithSources" "${LIBFBC_SOURCE_DIR}/src/fbc" YES)
+  addDoxygen("fbc_doxygen" "WithSources" "${LIBFBC_SOURCE_DIR}/src/fbc" YES)
 else()
-  csmAddDoxygen("doxygen" "WithoutSources" "${LIBFBC_SOURCE_DIR}/src/fbc" NO)
+  addDoxygen("fbc_doxygen" "WithoutSources" "${LIBFBC_SOURCE_DIR}/src/fbc" NO)
 endif()
