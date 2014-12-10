@@ -7,20 +7,22 @@
 
 SET(LIBSBML_FOUND 0)
 
-find_path(LIBSBML_INCLUDE_DIR
-  NAMES sbml/SBMLTypes.h
-  PATHS /usr/include
-        /usr/local/include
-        /opt/local/include
-  )
+IF(NOT LIBSBML_LIBRARY)
+  find_path(LIBSBML_INCLUDE_DIR
+    NAMES sbml/SBMLTypes.h
+    PATHS /usr/include
+          /usr/local/include
+          /opt/local/include
+    )
 
-find_library(LIBSBML_LIBRARY
-  NAMES libsbml.so libsbml.dll libsbml
-  PATHS /usr/lib
-        /usr/lib64
-        /usr/local/lib
-        /opt/local/lib
-  )
+  find_library(LIBSBML_LIBRARY
+    NAMES libsbml.so libsbml.dll libsbml
+    PATHS /usr/lib
+          /usr/lib64
+          /usr/local/lib
+          /opt/local/lib
+    )
+ENDIF()
 
 IF(LIBSBML_LIBRARY)
   SET(LIBSBML_FOUND 1)
