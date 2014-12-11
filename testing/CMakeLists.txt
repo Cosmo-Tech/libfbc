@@ -11,32 +11,32 @@ include_directories("${LPSOLVE_SOURCE_DIR}")
 
 add_executable(TestSolveFromSBMLFile TestSolveFromSBMLFile.cxx)
 target_link_libraries(TestSolveFromSBMLFile fbc)
-fbcAddTest(SolveFromSBMLFile TestSolveFromSBMLFile "salmonella_fbc.xml")
+fbcAddTest(fbcSolveFromSBMLFile TestSolveFromSBMLFile "salmonella_fbc.xml")
 
 add_executable(TestSolveFromSBMLString TestSolveFromSBMLString.cxx)
 target_link_libraries(TestSolveFromSBMLString fbc ${LIBSBML_LIBRARY})
-fbcAddTest(SolveFromSBMLString TestSolveFromSBMLString "salmonella_fbc.xml")
+fbcAddTest(fbcSolveFromSBMLString TestSolveFromSBMLString "salmonella_fbc.xml")
 
 add_executable(TestSetFluxBound TestSetFluxBound.cxx)
 target_link_libraries(TestSetFluxBound fbc)
-fbcAddTest(SetFluxBound TestSetFluxBound "FEBS_antimony.xml")
+fbcAddTest(fbcSetFluxBound TestSetFluxBound "FEBS_antimony.xml")
 
 add_executable(TestUnsetFluxBound TestUnsetFluxBound.cxx)
 target_link_libraries(TestUnsetFluxBound fbc)
-fbcAddTest(UnsetFluxBound TestUnsetFluxBound "FEBS_antimony.xml")
+fbcAddTest(fbcUnsetFluxBound TestUnsetFluxBound "FEBS_antimony.xml")
 
 add_executable(TestChangeObjectiveFunction TestChangeObjectiveFunction.cxx)
 target_link_libraries(TestChangeObjectiveFunction fbc)
-fbcAddTest(ChangeObjectiveFunction TestChangeObjectiveFunction "FEBS_antimony.xml")
+fbcAddTest(fbcChangeObjectiveFunction TestChangeObjectiveFunction "FEBS_antimony.xml")
 
 add_executable(TestChangeObjectiveSense TestChangeObjectiveSense.cxx)
 target_link_libraries(TestChangeObjectiveSense fbc)
-fbcAddTest(ChangeObjectiveSense TestChangeObjectiveSense "FEBS_antimony.xml")
+fbcAddTest(fbcChangeObjectiveSense TestChangeObjectiveSense "FEBS_antimony.xml")
 
 add_executable(TestSetPreSolveSettings TestSetPreSolveSettings.cxx)
 target_link_libraries(TestSetPreSolveSettings fbc)
-fbcAddTest(SetPreSolveSettings TestSetPreSolveSettings "salmonella_fbc.xml")
+fbcAddTest(fbcSetPreSolveSettings TestSetPreSolveSettings "salmonella_fbc.xml")
 
 add_executable(TestFluxVectorSizes TestFluxVectorSizes.cxx)
 target_link_libraries(TestFluxVectorSizes fbc)
-fbcAddTest(FluxVectorSizes TestFluxVectorSizes "salmonella_fbc.xml")
+fbcAddTest(fbcFluxVectorSizes TestFluxVectorSizes "salmonella_fbc.xml")
