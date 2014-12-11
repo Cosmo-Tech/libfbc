@@ -5,9 +5,11 @@
 #include "../../fbc/fbcFluxes.hxx"
 %}
 %include "std_vector.i"
+%include "std_string.i"
 
 namespace std {
   %template(vectord) vector<double>;
+  %template(vectorstr) vector<string>;
 }
 
 namespace fbc {
@@ -46,6 +48,8 @@ namespace fbc {
   class Fluxes {
     public:
       double get(const char* key);
+      std::string getKey(int index);
+      std::vector<std::string> getKeys();
       int size();
   };
 }

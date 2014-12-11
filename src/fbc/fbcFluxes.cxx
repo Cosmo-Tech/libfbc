@@ -31,6 +31,7 @@ Fluxes::Fluxes(LPProblem* solved_model, List* r_lst)
   {
     Reaction* rt = (Reaction*) r_lst->get(c);
     fluxes[rt->getId()] = 0.0;
+    keys.push_back(const_cast<char*>(rt->getId().c_str()));
   }
   // extracting real flux values from solved model
   int nrows = get_Nrows(solved_model->getLpModel());
@@ -57,6 +58,7 @@ Fluxes::Fluxes(Fluxes* fl, List* er_lst)
     Reaction* rt = (Reaction*) er_lst->get(i);
     const char* id = rt->getId().c_str();
     fluxes[id] = fl->get(id);
+    keys.push_back(const_cast<char*>(id));
   }
 }
 
@@ -84,6 +86,31 @@ double Fluxes::get(const char* key)
   {
     return fluxes[key];
   }
+}
+
+/* /brief Return the element at "index" in "keys".
+ * @param index An integer value.
+ * @return A string.
+ */
+std::string Fluxes::getKey(int index)
+{
+  if ( index < keys.size() )
+  {
+    return keys[index];
+  }
+  else
+  {
+    std::cout << "Error: index " << index << " out of range.\n";
+    exit(EXIT_FAILURE);
+  }
+}
+
+/* /brief Return "keys".
+ * @return The list of keys of "fluxes" map.
+ */
+std::vector<std::string> Fluxes::getKeys()
+{
+  return keys;
 }
 
 /** \brief Return the number of elements in "this".
