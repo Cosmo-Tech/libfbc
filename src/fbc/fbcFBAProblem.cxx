@@ -29,6 +29,9 @@ FBAProblem::FBAProblem()
   problem = new LPProblem;
   timeOut = 60;
   preSolveSettings = PRESOLVE_ROWS | PRESOLVE_COLS;
+  // Ensure that lists are initialized to empty lists when creating a FBAProblem
+  fluxList = NULL;
+  exchangeFluxList = NULL;
 }
 
 /** \brief Destructor.
@@ -36,6 +39,14 @@ FBAProblem::FBAProblem()
  */
 FBAProblem::~FBAProblem()
 {
+  if(fluxList != NULL)
+  {
+    delete fluxList;
+  }
+  if(exchangeFluxList != NULL)
+  {
+    delete exchangeFluxList; 
+  }
   delete problem;
 }
 
@@ -194,6 +205,50 @@ void FBAProblem::initFromSBMLString(const char* string)
   {
     initFromSBML(doc->getModel());
   }
+}
+
+/** \brief Initializes this with the content of a LP file. This method was
+ *         designed to be used after a first initialization based on an SBML
+ *         file. LP model should be consistent with the model of this first SBML
+ *         file.
+ *
+ * This method aims at allowing a user which needs to launch FBA calculation
+ * several times to save computing time. The solving of a FBA problem will
+ * indeed possibly modify the associated LP problem by doing simplifications in
+ * order to solve the problem, especially when using pre-solve functions. The
+ * proposed solution to avoid successive opening of SBML files, very time
+ * consuming, is to firstly init FBA problem based on a SBML file
+ * (FBAProblem::initFromSBMLFile or FBAProblem::initFromSBMLString), then
+ * write the associated LP problem in a file (FBAProblem::writeProblem)
+ * and reopen it each time a new FBA computation
+ * is required. Opening the SBML file triggers the initialization of
+ * meta-information such as the list of fluxes and the list of exchange fluxes.
+ * 	
+ * The lp-format is a file format for describing linear programming problems in 	
+ * lp_solve; its complete description can be found in the lp_solve reference 	
+ * guide at http://lpsolve.sourceforge.net/. 	
+ * @param file Address of a LP file. 	
+ */
+void FBAProblem::initFromLPFile(const char* file) 	
+{
+  if(fluxList == NULL)
+  {
+    std::cout << " Error : fluxList is empty. Please note that the loading "
+    << "of the associated SBML file should have been scheduled as it is the "
+    << " expected use's context of this method. For more "
+    << "information, please refer to the documentation ";
+    exit(EXIT_FAILURE);
+  }
+  else if(exchangeFluxList == NULL)
+  {
+    std::cout << " Error : exchangeFluxList is empty. Please check the "
+    << "metabolic network : it is strange that the network is not empty but "
+    << "that all the metabolites consumed are produced too and vice-versa "
+    << "within the network, implying a total independancy towards the "
+    << "external world.";
+    exit(EXIT_FAILURE);
+  }
+  problem->setLpModel(read_LP(const_cast<char*>(file), NORMAL, ""));
 }
 
 /** \brief Fill the matrix of the linear problem.

@@ -25,6 +25,7 @@ namespace fbc {
       double getUpperFluxBound(const char* reaction);
       void initFromSBMLFile(const char* file);
       void initFromSBMLString(const char* string);
+      void initFromLPFile(const char* file);
       void printProblem();
       void setFluxBound(const char* reaction, const char* type, double value);
       void setObjective(std::vector<double> objective);

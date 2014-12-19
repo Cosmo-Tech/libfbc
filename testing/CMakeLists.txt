@@ -9,6 +9,11 @@ endmacro()
 include_directories("${FBC_SOURCE_DIR}")
 include_directories("${LPSOLVE_SOURCE_DIR}")
 
+add_executable(TestSolveFromLPFile TestSolveFromLPFile.cxx) 	
+target_link_libraries(TestSolveFromLPFile fbc) 	
+fbcAddTest(fbcSolveFromLPFile TestSolveFromLPFile "test.lp")
+set_tests_properties(fbcSolveFromLPFile PROPERTIES WILL_FAIL ON)
+
 add_executable(TestSolveFromSBMLFile TestSolveFromSBMLFile.cxx)
 target_link_libraries(TestSolveFromSBMLFile fbc)
 fbcAddTest(fbcSolveFromSBMLFile TestSolveFromSBMLFile "salmonella_fbc.xml")
@@ -16,6 +21,10 @@ fbcAddTest(fbcSolveFromSBMLFile TestSolveFromSBMLFile "salmonella_fbc.xml")
 add_executable(TestSolveFromSBMLString TestSolveFromSBMLString.cxx)
 target_link_libraries(TestSolveFromSBMLString fbc ${LIBSBML_LIBRARY})
 fbcAddTest(fbcSolveFromSBMLString TestSolveFromSBMLString "salmonella_fbc.xml")
+
+add_executable(TestSolveFromSBMLandLPFile TestSolveFromSBMLandLPFile.cxx) 	
+target_link_libraries(TestSolveFromSBMLandLPFile fbc) 	
+fbcAddTest(fbcSolveFromSBMLandLPFile TestSolveFromSBMLandLPFile "salmonella_fbc.xml")
 
 add_executable(TestSetFluxBound TestSetFluxBound.cxx)
 target_link_libraries(TestSetFluxBound fbc)
