@@ -46,16 +46,16 @@ Solution::~Solution()
  */
 Fluxes* Solution::getExchangeFluxes()
 {
-  Fluxes ex_fl;
+  Fluxes* ex_fl;
   for (int i = 0; i < fluxes.getKeys().size(); i++)
   {
     Flux* flx = fluxes.get(fluxes.getKey(i).c_str());
     if (flx->isExchange())
     {
-      ex_fl.add(flx);
+      ex_fl->add(flx);
     }
   }
-  return &ex_fl;
+  return ex_fl;
 }
 
 /** \brief Getter.

@@ -3,7 +3,7 @@
 #include "fbcFBAProblem.hxx"
 
 /** \brief Test the size of the resulting vectors of fluxes after resolution.
- * Loads an SBML model, solves it and chack the size of its resulting vector
+ * Loads an SBML model, solves it and check the size of its resulting vector
  * of fluxes and exchange fluxes.
  */
 int main (int argc, char *argv[])

@@ -49,3 +49,11 @@ fbcAddTest(fbcSetPreSolveSettings TestSetPreSolveSettings "salmonella_fbc.xml")
 add_executable(TestFluxVectorSizes TestFluxVectorSizes.cxx)
 target_link_libraries(TestFluxVectorSizes fbc)
 fbcAddTest(fbcFluxVectorSizes TestFluxVectorSizes "salmonella_fbc.xml")
+
+add_executable(TestFluxAPI TestFluxAPI.cxx)
+target_link_libraries(TestFluxAPI fbc)
+fbcAddTest(fbcFluxAPI TestFluxAPI "salmonella_fbc.xml")
+
+add_executable(TestExchangeFluxAPI TestExchangeFluxAPI.cxx)
+target_link_libraries(TestExchangeFluxAPI fbc)
+fbcAddTest(fbcExchangeFluxAPI TestExchangeFluxAPI "salmonella_fbc.xml")
