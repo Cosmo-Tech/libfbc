@@ -11,19 +11,20 @@ class List;
 namespace fbc
 {
 
+class Flux;
 class LPProblem;
 
 class Fluxes
 {
   private:
-    std::map<std::string,double> fluxes;
+    std::map<std::string,Flux*> fluxes;
     std::vector<std::string> keys;
   public:
     Fluxes();
-    Fluxes(LPProblem* solved_model, List* r_lst);
-    Fluxes(Fluxes* fl, List* er_lst);
+    Fluxes(LPProblem* solved_model, List* r_lst, List* bc_lst);
     ~Fluxes();
-    double get(const char* key);
+    void add(Flux* flux);
+    Flux* get(const char* key);
     std::string getKey(int index);
     std::vector<std::string> getKeys();
     int size();

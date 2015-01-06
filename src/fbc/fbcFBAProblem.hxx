@@ -20,7 +20,7 @@ class LPProblem;
 class FBAProblem
 {
   private:
-    List* exchangeFluxList;
+    List* bcList;
     List* fluxList;
     int preSolveSettings;
     LPProblem* problem;

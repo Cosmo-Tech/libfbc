@@ -16,11 +16,10 @@ class Solution
 {
   private:
     double objectiveValue;
-    Fluxes exchangeFluxes;
     Fluxes fluxes;
   public:
     Solution();
-    Solution(LPProblem* solved_model, List* r_lst, List* er_list);
+    Solution(LPProblem* solved_model, List* r_lst, List* bc_lst);
     ~Solution();
     double getObjectiveValue();
     Fluxes* getExchangeFluxes();

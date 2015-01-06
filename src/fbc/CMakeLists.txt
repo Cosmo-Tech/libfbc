@@ -12,6 +12,8 @@ set(LIBFBC_SOURCES
   ${FBC_SOURCE_DIR}/fbcSolution.hxx
   ${FBC_SOURCE_DIR}/fbcFluxes.cxx
   ${FBC_SOURCE_DIR}/fbcFluxes.hxx
+  ${FBC_SOURCE_DIR}/fbcFlux.cxx
+  ${FBC_SOURCE_DIR}/fbcFlux.hxx
   ${FBC_SOURCE_DIR}/fbcLPProblem.cxx
   ${FBC_SOURCE_DIR}/fbcLPProblem.hxx
   ${FBC_SOURCE_DIR}/fbcNonBoundaryConditionFilter.cxx

@@ -31,7 +31,7 @@ FBAProblem::FBAProblem()
   preSolveSettings = PRESOLVE_ROWS | PRESOLVE_COLS;
   // Ensure that lists are initialized to empty lists when creating a FBAProblem
   fluxList = NULL;
-  exchangeFluxList = NULL;
+  bcList = NULL;
 }
 
 /** \brief Destructor.
@@ -43,9 +43,9 @@ FBAProblem::~FBAProblem()
   {
     delete fluxList;
   }
-  if(exchangeFluxList != NULL)
+  if(bcList != NULL)
   {
-    delete exchangeFluxList; 
+    delete bcList; 
   }
   delete problem;
 }
@@ -233,16 +233,16 @@ void FBAProblem::initFromLPFile(const char* file)
 {
   if(fluxList == NULL)
   {
-    std::cout << " Error : fluxList is empty. Please note that the loading "
+    std::cout << " Error: fluxList is empty. Please note that the loading "
     << "of the associated SBML file should have been scheduled as it is the "
     << " expected use's context of this method. For more "
-    << "information, please refer to the documentation ";
+    << "information, please refer to the documentation.";
     exit(EXIT_FAILURE);
   }
-  else if(exchangeFluxList == NULL)
+  else if(bcList == NULL)
   {
-    std::cout << " Error : exchangeFluxList is empty. Please check the "
-    << "metabolic network : it is strange that the network is not empty but "
+    std::cout << " Error: bcList is empty. Please check the "
+    << "metabolic network: it is strange that the network is not empty but "
     << "that all the metabolites consumed are produced too and vice-versa "
     << "within the network, implying a total independancy towards the "
     << "external world.";
@@ -263,11 +263,9 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
   BoundaryConditionFilter bc_flt;
   ReactionFilter r_flt;
   List* non_bc = sb_model->getListOfSpecies()->getAllElements(&non_bc_flt);
-  List* bc = sb_model->getListOfSpecies()->getAllElements(&bc_flt);
-  ExchangeReactionFilter er_flt = ExchangeReactionFilter(bc);
-  // initialize "exchangeFluxList" and "fluxList" attributes
-  exchangeFluxList = sb_model->getListOfReactions()->getAllElements(&er_flt);
+  // initialize "bcList" and "fluxList" attributes
   fluxList = sb_model->getListOfReactions()->getAllElements(&r_flt);
+  bcList = sb_model->getListOfSpecies()->getAllElements(&bc_flt);
   // build "problem"
   const Objective* obj = pl->getActiveObjective();
   int num_species = non_bc->getSize();
@@ -452,7 +450,7 @@ void FBAProblem::solveProblem()
     get_presolveloops(problem->getLpModel()));
   set_timeout(problem->getLpModel(), timeOut);
   solve(problem->getLpModel());
-  solution = Solution(problem, fluxList, exchangeFluxList);
+  solution = Solution(problem, fluxList, bcList);
 }
 
 /** \brief Set the target reaction flux free.

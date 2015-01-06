@@ -3,6 +3,7 @@
 #include "../../fbc/fbcFBAProblem.hxx"
 #include "../../fbc/fbcSolution.hxx"
 #include "../../fbc/fbcFluxes.hxx"
+#include "../../fbc/fbcFlux.hxx"
 %}
 %include "std_vector.i"
 %include "std_string.i"
@@ -48,9 +49,22 @@ namespace fbc {
 
   class Fluxes {
     public:
-      double get(const char* key);
+      fbc::Flux* get(const char* key);
       std::string getKey(int index);
       std::vector<std::string> getKeys();
       int size();
+  };
+
+  class Flux {
+    public:
+      bool isBCProduct();
+      bool isBCReactant();
+      bool isExchange();
+      bool isSink();
+      bool isSource();
+      std::vector<std::string> getProductIds();
+      std::vector<std::string> getReactantIds();
+      std::string getId();
+      double getValue();
   };
 }
