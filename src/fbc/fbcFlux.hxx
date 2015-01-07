@@ -28,8 +28,6 @@ class Flux
     bool isBCProduct();
     bool isBCReactant();
     bool isExchange();
-    bool isSink();
-    bool isSource();
     std::vector<std::string> getProductIds();
     std::vector<std::string> getReactantIds();
     std::string getId();

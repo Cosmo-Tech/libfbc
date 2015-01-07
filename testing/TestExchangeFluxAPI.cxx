@@ -15,8 +15,6 @@ int main (int argc, char *argv[])
   fbc::Flux* flx = pbm.getSolution()->getFluxes()->get("R_EX_ac_e");
   assert(flx->getProductIds().size() == 1);
   assert(flx->getReactantIds().size() == 1);
-  assert(flx->isSink() == false);
-  assert(flx->isSource() == false);
   assert(flx->isExchange() == true);
   assert(flx->isBCProduct() == true);
   assert(flx->isBCReactant() == false);

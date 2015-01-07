@@ -94,38 +94,6 @@ bool Flux::isExchange()
   return exchange;
 }
 
-/** Returns true if the size of "products" is equal to zero; returns false
- * otherwise.
- * @return A boolean value.
- */
-bool Flux::isSink()
-{
-  if (products.size() != 0)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-
-/** Returns true if the size of "reactants" is equal to zero; returns false
- * otherwise.
- * @return A boolean value.
- */
-bool Flux::isSource()
-{
-  if (reactants.size() != 0)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-
 /** \brief Getter.
  *
  * @return products
