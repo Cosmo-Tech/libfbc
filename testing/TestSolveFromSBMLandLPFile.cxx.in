@@ -13,8 +13,8 @@ int main (int argc, char *argv[])
 { 	
    fbc::FBAProblem pbm;
    pbm.initFromSBMLFile(argv[1]);
-   pbm.writeProblem("TestLPthroughSBML.xml");
-   pbm.initFromLPFile("TestLPthroughSBML.xml");
+   pbm.writeProblem("${CMAKE_CURRENT_BINARY_DIR}/TestLPthroughSBML.lp");
+   pbm.initFromLPFile("${CMAKE_CURRENT_BINARY_DIR}/TestLPthroughSBML.lp");
    pbm.solveProblem(); 	
    assert(floor(100 * pbm.getSolution()->getObjectiveValue()) == 38);	
    return 0; 	

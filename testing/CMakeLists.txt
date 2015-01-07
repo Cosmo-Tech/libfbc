@@ -9,6 +9,11 @@ endmacro()
 include_directories("${FBC_SOURCE_DIR}")
 include_directories("${LPSOLVE_SOURCE_DIR}")
 
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/TestSolveFromSBMLandLPFile.cxx.in
+  ${CMAKE_CURRENT_BINARY_DIR}/TestSolveFromSBMLandLPFile.cxx
+)
+
 add_executable(TestSolveFromLPFile TestSolveFromLPFile.cxx) 	
 target_link_libraries(TestSolveFromLPFile fbc) 	
 fbcAddTest(fbcSolveFromLPFile TestSolveFromLPFile "test.lp")
@@ -22,9 +27,16 @@ add_executable(TestSolveFromSBMLString TestSolveFromSBMLString.cxx)
 target_link_libraries(TestSolveFromSBMLString fbc ${LIBSBML_LIBRARY})
 fbcAddTest(fbcSolveFromSBMLString TestSolveFromSBMLString "salmonella_fbc.xml")
 
-add_executable(TestSolveFromSBMLandLPFile TestSolveFromSBMLandLPFile.cxx) 	
+add_executable(
+  TestSolveFromSBMLandLPFile
+  ${CMAKE_CURRENT_BINARY_DIR}/TestSolveFromSBMLandLPFile.cxx
+) 	
 target_link_libraries(TestSolveFromSBMLandLPFile fbc) 	
-fbcAddTest(fbcSolveFromSBMLandLPFile TestSolveFromSBMLandLPFile "salmonella_fbc.xml")
+fbcAddTest(
+  fbcSolveFromSBMLandLPFile
+  TestSolveFromSBMLandLPFile
+  "salmonella_fbc.xml"
+)
 
 add_executable(TestSetFluxBound TestSetFluxBound.cxx)
 target_link_libraries(TestSetFluxBound fbc)
