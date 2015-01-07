@@ -86,6 +86,13 @@ bool Flux::isBCReactant()
 }
 
 /** \brief Getter.
+ * 
+ * It returns a boolean indicating if this flux represents or not an exchange
+ * reaction, i.e. a reaction which has either for reactant or for product
+ * a metabolite described as a "boundary condition" metabolite. This kind of
+ * metabolite is not taken into account in the stoechiometric matrix built to
+ * solve the FBC problem as it is not possible to consider that the concerned
+ * metabolites are fully consumed thanks to the modeled metabolism.
  *
  * @return exchange
  */
@@ -96,6 +103,12 @@ bool Flux::isExchange()
 
 /** \brief Getter.
  *
+ * Returns the identifiers of the elements defined in the listOfProducts tag
+ * of the associated reaction in the sbml file. Be aware that it does not mean
+ * these elements are necessarily produced, as reactions can be reversible.
+ * Please therefore check the sign of the computed flux value to obtain this
+ * piece of information.
+ * 
  * @return products
  */
 std::vector<std::string> Flux::getProductIds()
@@ -104,6 +117,12 @@ std::vector<std::string> Flux::getProductIds()
 }
 
 /** \brief Getter.
+ *
+ * Returns the identifiers of the elements defined in the listOfReactants tag
+ * of the associated reaction in the sbml file. Be aware that it does not mean
+ * these elements are necessarily consumed, as reactions can be reversible.
+ * Please therefore check the sign of the computed flux value to obtain this
+ * piece of information.
  *
  * @return reactants
  */
@@ -114,6 +133,8 @@ std::vector<std::string> Flux::getReactantIds()
 
 /** \brief Getter.
  *
+ * Returns the SBML identifier of the associated reaction.
+ *
  * @return id
  */
 std::string Flux::getId()
@@ -122,6 +143,8 @@ std::string Flux::getId()
 }
 
 /** \brief Getter.
+ *
+ * Returns the value of the computed flux for the associated reaction.
  *
  * @return value
  */
