@@ -32,8 +32,8 @@ Fluxes::Fluxes(LPProblem* solved_model, List* r_lst, List* bc_lst)
   for (int c = 0; c < r_lst->getSize(); c++)
   {
     Reaction* rt = (Reaction*) r_lst->get(c);
-    Flux flx = Flux(rt, 0.0, &*bc_lst);
-    fluxes[rt->getId()] = &flx;
+    Flux* flx = new Flux(rt, 0.0, &*bc_lst);
+    fluxes[const_cast<char*>(rt->getId().c_str())] = flx;
     keys.push_back(const_cast<char*>(rt->getId().c_str()));
   }
   // extracting real flux values from solved model
@@ -71,7 +71,7 @@ void Fluxes::add(Flux* flux)
   }
   else
   {
-    fluxes[flx_id] = flux;
+    fluxes[const_cast<char*>(flx_id.c_str())] = flux;
     keys.push_back(const_cast<char*>(flx_id.c_str()));
   }
 }
