@@ -2,7 +2,6 @@
 #include "fbcLPProblem.hxx"
 #include "lp_lib.h"
 
-#include "fbcFlux.hxx"
 #include "sbml/Reaction.h"
 #include "sbml/util/List.h"
 

@@ -1,6 +1,8 @@
 #ifndef __fbcFluxes_hxx
 #define __fbcFluxes_hxx
 
+#include "fbcFlux.hxx"
+
 #include <map>
 #include <string>
 #include <iostream>
@@ -11,7 +13,6 @@ class List;
 namespace fbc
 {
 
-class Flux;
 class LPProblem;
 
 class Fluxes
