@@ -38,7 +38,7 @@ Fluxes::Fluxes(LPProblem* solved_model, List* r_lst, List* bc_lst)
   // extracting real flux values from solved model
   int nrows = get_Nrows(solved_model->getLpModel());
   int ncols = get_Ncolumns(solved_model->getLpModel());
-  REAL pv[1+nrows+ncols];
+  double* pv = new double[1+nrows+ncols];
   get_primal_solution(solved_model->getLpModel(), pv);
   for (int i = 1; i <= ncols; i++)
   {

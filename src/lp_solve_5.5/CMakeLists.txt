@@ -71,13 +71,19 @@ add_definitions(-DYY_NEVER_INTERACTIVE)
 add_definitions(-DPARSER_LP)
 add_definitions(-DRoleIsExternalInvEngine)
 
+set(M_LIB)
+IF(NOT WIN32)
+  set(M_LIB m)
+ENDIF()
+
 add_library(lpsolve55-static STATIC ${SOURCES})
-target_link_libraries(lpsolve55-static ${CMAKE_DL_LIBS} m)
+target_link_libraries(lpsolve55-static ${CMAKE_DL_LIBS} ${M_LIB})
+
 add_library(lpsolve55 SHARED ${SOURCES})
-target_link_libraries(lpsolve55 ${CMAKE_DL_LIBS} m)
+target_link_libraries(lpsolve55 ${CMAKE_DL_LIBS} ${M_LIB})
 
 # libfbc patch - install files
-INSTALL(TARGETS lpsolve55-static lpsolve55
+INSTALL(TARGETS lpsolve55 lpsolve55-static 
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib

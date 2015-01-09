@@ -27,7 +27,7 @@ Solution::Solution(LPProblem* solved_model, List* r_lst, List* bc_lst)
 { 
   int nrows = get_Nrows(solved_model->getLpModel());
   int ncols = get_Ncolumns(solved_model->getLpModel());
-  REAL pv[1+nrows+ncols];
+  double* pv = new double[1+nrows+ncols];
   get_primal_solution(solved_model->getLpModel(), pv);
   objectiveValue = pv[0];
   fluxes = Fluxes(solved_model, &*r_lst, &*bc_lst);

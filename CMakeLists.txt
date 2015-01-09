@@ -3,6 +3,7 @@ project(libfbc)
 enable_testing()
 include(CTest)
 
+set(CMAKE_BUILD_TYPE "Release" CACHE PATH "" FORCE)
 set(LIBFBC_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 option(WITH_PYTHON "" ON)

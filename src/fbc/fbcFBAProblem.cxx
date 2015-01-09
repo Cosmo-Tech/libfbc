@@ -71,10 +71,10 @@ double FBAProblem::getLowerFluxBound(const char* reaction)
  */
 std::vector<double> FBAProblem::getObjective()
 {
-  int num_reactions = get_Ncolumns(problem->getLpModel());
-  double row[num_reactions + 1];
+  const int size = get_Ncolumns(problem->getLpModel()) + 1;
+  double* row = new double[size];
   get_row(problem->getLpModel(), 0, row);
-  std::vector<double> vec(row, row + num_reactions + 1);
+  std::vector<double> vec(row, row + size);
   vec.erase(vec.begin()); // remove first element
   return vec;
 }
@@ -283,7 +283,7 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
   // populate problem matrix
   for (int r = 0; r < sb_model->getNumReactions(); r++)
   {
-    REAL col[num_species + 1];
+    double* col = new double[num_species + 1];
     Reaction* rt = sb_model->getReaction(r);
     // objective function
     for (int o = 0; o < obj->getNumFluxObjectives(); o++)
@@ -389,7 +389,7 @@ void FBAProblem::setObjective(std::vector<double> objective)
   if (num_reactions == objective.size())
   {
     objective.insert(objective.begin(), 0.0);
-    double obj[objective.size()];
+    double* obj = new double[objective.size()];
     std::copy(objective.begin(), objective.end(), obj);
     set_row(problem->getLpModel(), 0, obj);
   }

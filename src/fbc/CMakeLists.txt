@@ -29,16 +29,16 @@ set(LIBFBC_SOURCES
 
 include_directories(${FBC_SOURCE_DIR})
 include_directories(${LPSOLVE_SOURCE_DIR})
+include_directories(${LIBSBML_INCLUDE_DIR})
 
 add_library(fbc-static STATIC ${LIBFBC_SOURCES})
 target_link_libraries(fbc-static ${LIBSBML_LIBRARY} lpsolve55-static)
-add_library(fbc SHARED ${LIBFBC_SOURCES})
-target_link_libraries(fbc ${LIBSBML_LIBRARY} lpsolve55)
 
-# Commands related to the installation of libfbc
+add_library(fbc SHARED ${LIBFBC_SOURCES})
+target_link_libraries(fbc ${LIBSBML_LIBRARY} lpsolve55-static)
 
 # Install targets
-INSTALL(TARGETS fbc-static fbc
+INSTALL(TARGETS fbc fbc-static
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
