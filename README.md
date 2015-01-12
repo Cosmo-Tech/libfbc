@@ -9,16 +9,32 @@ This project uses (and distributes)
 programming solver published under the LGPL 2.0 license.
 
 It requires [libSBML](http://sbml.org/Software/libSBML) to be installed with
-the FBC package.
+the FBC package (this means it has to be compiled, built and installed from
+source).
 
 ## Installation
-The library is built using [CMake](http://www.cmake.org/); open a command prompt
-in the project checkout folder then type:
+The library is built using [CMake](http://www.cmake.org/)
+
+### Ubuntu 12.04 (and later)
+Open a command prompt in the project checkout folder then type:
 ```
 mkdir build
 cd build
 cmake ..
 make
+```
+
+### Windows 7 (64-bit)
+It requires Microsoft Visual Studio to be installed. After SBML is installed
+(with FBC package), add the bin, lib and include folders from the SBML install
+directory to the PATH environment variable. Open a Visual Studio command prompt
+in the project checkout folder and type:
+```
+mkdir build
+cd build
+cmake -G "NMake Makefiles" ..
+nmake install
+ctest
 ```
 
 ## License
