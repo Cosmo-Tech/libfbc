@@ -28,7 +28,7 @@ Fluxes::Fluxes()
 Fluxes::Fluxes(LPProblem* solved_model, List* r_lst, List* bc_lst)
 {
   // dictionary of result is initialized based on the original problem
-  for (int c = 0; c < r_lst->getSize(); c++)
+  for (size_t c = 0; c < r_lst->getSize(); c++)
   {
     Reaction* rt = (Reaction*) r_lst->get(c);
     Flux* flx = new Flux(rt, 0.0, &*bc_lst);
@@ -98,7 +98,7 @@ Flux* Fluxes::get(const char* key)
  * @param index An integer value.
  * @return A string.
  */
-std::string Fluxes::getKey(int index)
+std::string Fluxes::getKey(size_t index)
 {
   if ( index < keys.size() )
   {

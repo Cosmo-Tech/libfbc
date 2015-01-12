@@ -281,12 +281,12 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
     set_constr_type(problem->getLpModel(), i+1, EQ);
   }
   // populate problem matrix
-  for (int r = 0; r < sb_model->getNumReactions(); r++)
+  for (size_t r = 0; r < sb_model->getNumReactions(); r++)
   {
     double* col = new double[num_species + 1];
     Reaction* rt = sb_model->getReaction(r);
     // objective function
-    for (int o = 0; o < obj->getNumFluxObjectives(); o++)
+    for (size_t o = 0; o < obj->getNumFluxObjectives(); o++)
     {
       FluxObjective* fl_obj =
         const_cast<FluxObjective*>(obj->getFluxObjective(o));
@@ -327,7 +327,7 @@ void FBAProblem::populateMatrix(Model* sb_model, FbcModelPlugin* pl)
     }
   }
   // edit reaction bounds
-  for (int b = 0; b < pl->getNumFluxBounds(); b++)
+  for (size_t b = 0; b < pl->getNumFluxBounds(); b++)
   {
     FluxBound* fb = pl->getFluxBound(b);
     setFluxBound(fb->getReaction().c_str(), fb->getOperation().c_str(),

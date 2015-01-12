@@ -25,17 +25,17 @@ ExchangeReactionFilter::ExchangeReactionFilter(List* sp_lst)
 bool ExchangeReactionFilter::filter(const SBase* element)
 {
   const Reaction* rt = dynamic_cast<const Reaction*>(element);
-  if (rt == NULL | speciesList == NULL)
+  if ( ( rt == NULL ) | ( speciesList == NULL ) )
   { 
     return false;
   }
   else
   {
-    for (int i = 0; i < speciesList->getSize(); i++)
+    for (size_t i = 0; i < speciesList->getSize(); i++)
     {
       Species* sp = (Species*) speciesList->get(i);
-      if (rt->getReactant(sp->getId()) != NULL |
-        rt->getProduct(sp->getId()) != NULL)
+      if ( ( rt->getReactant(sp->getId()) != NULL ) |
+        ( rt->getProduct(sp->getId()) != NULL ) )
       {
         return true;
       }

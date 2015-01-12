@@ -50,7 +50,7 @@ namespace fbc {
   class Fluxes {
     public:
       fbc::Flux* get(const char* key);
-      std::string getKey(int index);
+      std::string getKey(size_t index);
       std::vector<std::string> getKeys();
       int size();
   };

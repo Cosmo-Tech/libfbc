@@ -29,18 +29,18 @@ Flux::Flux(Reaction* rt, double flx, List* bc)
   bcReactant = false;
   // acquiring product identifiers
   products.clear();
-  for (int p = 0; p < rt->getNumProducts(); p++)
+  for (size_t p = 0; p < rt->getNumProducts(); p++)
   {
     products.push_back(rt->getProduct(p)->getSpecies());
   }
   // acquiring reactant identifiers
   reactants.clear();
-  for (int r = 0; r < rt->getNumReactants(); r++)
+  for (size_t r = 0; r < rt->getNumReactants(); r++)
   { 
     reactants.push_back(rt->getReactant(r)->getSpecies());
   }
   // is "rt" an exchange flux?
-  for (int s = 0; s < bc->getSize(); s++)
+  for (size_t s = 0; s < bc->getSize(); s++)
   {
     Species* sp = (Species*) bc->get(s);
     if (rt->getReactant(sp->getId()) != NULL)

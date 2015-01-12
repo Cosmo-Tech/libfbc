@@ -47,7 +47,7 @@ Solution::~Solution()
 Fluxes* Solution::getExchangeFluxes()
 {
   Fluxes* ex_fl = new Fluxes();
-  for (int i = 0; i < fluxes.getKeys().size(); i++)
+  for (size_t i = 0; i < fluxes.getKeys().size(); i++)
   {
     Flux* flx = fluxes.get(fluxes.getKey(i).c_str());
     if (flx->isExchange())
