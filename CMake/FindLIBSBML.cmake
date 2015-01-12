@@ -16,7 +16,7 @@ IF(NOT LIBSBML_LIBRARY)
     )
 
   find_library(LIBSBML_LIBRARY
-    NAMES libsbml
+    NAMES libsbml libsbml.so
     PATHS /usr/lib
           /usr/lib64
           /usr/local/lib

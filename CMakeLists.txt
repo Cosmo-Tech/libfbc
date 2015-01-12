@@ -10,6 +10,8 @@ option(WITH_PYTHON "" ON)
 
 if(NOT WIN32)
   option(FBC_GENERATE_DOXYGEN "Build the Doxygen documentation" ON)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 else()
   option(FBC_GENERATE_DOXYGEN "Build the Doxygen documentation" OFF)
 endif()
