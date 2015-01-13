@@ -15,13 +15,15 @@ source).
 ## Installation
 The library is built using [CMake](http://www.cmake.org/)
 
-### Ubuntu 12.04 (and later)
+### Ubuntu 12.04 and later (32-bit and 64-bit)
 Open a command prompt in the project checkout folder then type:
 ```
 mkdir build
 cd build
 cmake ..
 make
+sudo make install
+make test
 ```
 
 ### Windows 7 (64-bit)
@@ -36,6 +38,14 @@ cmake -G "NMake Makefiles" ..
 nmake install
 ctest
 ```
+
+## Python wrappers
+They are activated by default; [SWIG](http://www.swig.org/) is required to
+build them. Once libFBC is installed, its API can be used in any Python script or
+shell after an ```import libfbc```. On Linux, executing a ```ldconfig``` command
+might be required before using the wrappers.
+Wrappers can be de-activated by setting the CMake variable ```WITH_PYTHON```
+to ```OFF```.
 
 ## License
 This project is distributed under the terms of the
