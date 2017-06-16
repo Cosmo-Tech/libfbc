@@ -51,7 +51,7 @@ to ```OFF```.
 This project is distributed under the terms of the
 [BSD-3 clause license](http://opensource.org/licenses/BSD-3-Clause):
 
-Copyright (c) [2014-2015], The CoSMo Company
+Copyright (c) [2014-2017], Cosmo Tech
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
